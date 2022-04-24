@@ -1,0 +1,131 @@
+<?php 
+    require "../db/connection.php";
+	require "dashhed.php";
+
+?>
+			<ul class="nav">
+						<li class="nav-item">
+							<a href="index.php">
+								<i class="la la-dashboard" style="color: #00ff7f;"></i>
+								<p>Dashboard</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="customer_1.php">
+								<i class="la la-users" style="color: #00ff7f;"></i>
+								<p>Customer</p>
+							</a>
+						</li>
+						<li class="nav-item active">
+							<a href="worker_1.php">
+								<i class="la la-users"></i>
+								<p>Workers</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="request_1.php">
+								<i class="la la-cart-arrow-down" style="color: #00ff7f;"></i>
+								<p>Request</p>
+								<span class="badge badge-success">3</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- pandelll or container -->
+			<div class="main-panel" style="background: #87ceeb;">
+				<div class="content">
+					<div class="container-fluid" style=" margin-top: -20px;">
+						<!-- <h4 class="page-title">Component</h4> -->
+						<div class="row">
+							<!-- componeent here -->
+                            <div class="col-md-12">
+							<div class="card" style="background: #87ceeb;border-color: #87ceeb;">
+									<div class="card-body" style="padding-top: 0px;">
+										<div class="panel panel-primary filterable">
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														<button class="btn btn-xs btn-filter float-md-right" id="flt" title="filter table"><span class="glyphicon glyphicon-filter la la-filter" id="fd"></span></button>
+													</h3>
+												</div>
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														<a href="worker_1_add.php"><button class="btn btn-xs float-md-left" id="flt1" ><span class="la la-plus-circle" id="fd"></span></button></a>
+													</h3>
+												</div>
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														Workers List
+													</h3>
+												</div>
+											<div class="table-responsive">
+												<table class="table table-hover table-striped mt-3">
+												<?php 
+													$sl = "SELECT id_owner FROM owner WHERE owner_email = '$curent_em'";
+													$q = mysqli_query($conn,$sl) or die("un expected error");
+													$own_id = mysqli_fetch_assoc($q);
+													$own_id = (int)$own_id['id_owner'];
+
+													$select = "SELECT * FROM worker WHERE owner_id = $own_id";
+
+													$result = mysqli_query($conn,$select);
+
+													if(mysqli_num_rows($result)>0){
+
+														?>
+													<thead>
+														<tr class="filters" style="background-color:#2e8b57;">
+															<th><input type="text" class="form-control" placeholder=" No." disabled></th>
+															<th><input type="text" class="form-control" placeholder=" Full Name" disabled></th>
+															<th><input type="text" class="form-control" placeholder=" User Name" disabled></th>
+															<th><input type="text" class="form-control" placeholder=" Phone" disabled></th>
+															<th><input type="text" class="form-control" placeholder=" Email" disabled></th>
+															<th><input type="text" class="form-control" placeholder=" Place" disabled></th>
+															<th><input type="text" class="form-control" placeholder=" Status" disabled></th>
+															<th class="td-actions text-center" style="color: black;">Action</th>
+														</tr>
+													</thead>
+													<tbody>
+													<?php
+														
+														$sn=1;
+														while($worker=mysqli_fetch_assoc($result)){
+														// $iid = $worker['id'];
+														// $qrr = "SELECT company.company_name FROM owner JOIN company ON company.id_company = owner.id_company WHERE owner.id_owner = (SELECT owner_id FROM worker WHERE id = $iid);";
+														// $company = mysqli_query($conn,$qrr);
+														// $company = mysqli_fetch_assoc($company);
+														?>
+														<tr>
+															<td scope="row" id="tfont"><?php echo $sn++?></td>
+															<td id="tfont"><?php echo $worker['worker_first_name']." ".$worker['worker_second_name'];?></td>
+															<td id="tfont"><?php echo $worker['worker_last_name'];?></td>
+															<td id="tfont"><?php echo $worker['worker_phone'];?></td>
+															<td id="tfont"><?php echo $worker['worker_email']; ?></td>
+															<td id="tfont"><?php echo $worker['worker_address'];?></td>
+															<td id="tfont"><?php echo $worker['id_schedule'];?></td>
+															<td id="tfont" class="td-actions text-center"><a href="worker_1_edit.php?w_update=<?php echo$worker['id'];?>"><i class="la la-edit" title="Edit"></i></a> <a href="worker_1_delet.php?delete=<?php echo$worker['id'];?>"><i class="la la-times text-danger" title="Remove"></i</a></td>
+														</tr>
+														<?php
+														}  }
+														?>
+													</tbody>
+												</table>
+												<p id="rc">No.of Rows : <span id="rowcount"></span></p>
+												<script>
+												function checkval(){1==$("tbody tr:visible").length&&"No result found"==$("tbody tr:visible td").html()?$("#rowcount").html("0"):$("#rowcount").html($("tr:visible").length-1)}$(document).ready(function(){$("#rowcount").html($(".filterable tr").length-1),$(".filterable .btn-filter").click(function(){var t=$(this).parents(".filterable"),e=t.find(".filters input"),l=t.find(".table tbody");1==e.prop("disabled")?(e.prop("disabled",!1),e.first().focus()):(e.val("").prop("disabled",!0),l.find(".no-result").remove(),l.find("tr").show()),$("#rowcount").html($(".filterable tr").length-1)}),$(".filterable .filters input").keyup(function(t){if("9"!=(t.keyCode||t.which)){var e=$(this),l=e.val().toLowerCase(),n=e.parents(".filterable"),i=n.find(".filters th").index(e.parents("th")),r=n.find(".table"),o=r.find("tbody tr"),d=o.filter(function(){return-1===$(this).find("td").eq(i).text().toLowerCase().indexOf(l)});r.find("tbody .no-result").remove(),o.show(),d.hide(),d.length===o.length&&r.find("tbody").prepend($('<tr class="no-result text-center"><td colspan="'+r.find(".filters th").length+'">No result found</td></tr>'))}$("#rowcount").html($("tr:visible").length-1),checkval()})});
+												</script>
+											</div>
+
+										</div>
+									</div>
+								</div>
+                        </div>
+							<!-- end here -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end of pannel or container -->
+<?php 
+	require "dashfoot.php";
+?>
