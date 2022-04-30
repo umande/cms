@@ -5,7 +5,7 @@ session_start();
 require 'functions.php';
 $errors = array();
 if (isset($_POST['login'])) {
-
+    
     $username = mysqli_real_escape_string($conn, dataSanitizations($_POST['username']));
     $password = mysqli_real_escape_string($conn, dataSanitizations($_POST['password']));
     global $errors; 

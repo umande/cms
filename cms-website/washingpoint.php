@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>car wash</title>
+        <link rel="shortcut icon" href="../design/images/icon.jpg">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta http-equiv="x-ua-compatible" content="IE=edge">
         <!-- Favicon -->
@@ -26,6 +27,7 @@
         var icon = new google.maps.MarkerImage("http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
         new google.maps.Size(50, 50), new google.maps.Point(0, 0),
         new google.maps.Point(16, 32));
+        // console.log(navigator.geolocation);
         const center = [-3.368277, 36.680892];
         var map = null;
         var currentPopup;
@@ -98,8 +100,8 @@
             border-color: rgba(13, 110, 253, 0.7);
             box-shadow: 0px 0px 10px 2px rgba(13, 110, 253, 0.6);
         }
-        #map gm-style-iw-d div{
-            color: black;
+        .gm-style .gm-style-iw{
+            color: black !important;
         }
     </style>
     </head>

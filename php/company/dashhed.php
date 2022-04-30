@@ -10,6 +10,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<title>c.m.s</title>
+	<link rel="shortcut icon" href="../../design/images/icon.jpg">
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
 	
 	<link rel="stylesheet" href="../../design/css/bootstrap.min.css">

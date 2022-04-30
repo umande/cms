@@ -87,7 +87,7 @@
                                             <a href="worker_1.php"><button class="btn btn-xs float-md-left" id="flt1" ><span class="la la-mail-reply" id="fd"></span></button></a>
                                         </h3>
                                         <h4 class="panel-title">
-                                            Customer Edit
+                                            Edit Worker
                                         </h4>
                                     </div>
                                 <div class="col-md-12">

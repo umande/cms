@@ -2053,11 +2053,12 @@ body {
   opacity: 0;
 }
 .main-header .logo-header .navbar-toggler .navbar-toggler-icon {
-  background: url(../img/menu2.png);
+  background: url(../img/menu.png);
   background-size: cover;
   height: 1em;
   width: 1em;
   opacity: .8;
+  margin: 2px solid red !important;
 }
 .main-header .logo-header .more {
   background: transparent;
