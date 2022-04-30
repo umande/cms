@@ -1,7 +1,5 @@
 <?php 
-    require "../php/sanitization.php";
-    session_start();
-    require '../php/functions.php';
+    require "../php/weblogin.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,11 +42,24 @@
 
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto">
+                            <?php 
+                                if($_SESSION['$logsension'] == true){
+                                    ?>
                                 <a href="index.php" class="nav-item nav-link">Home</a>
                                 <a href="service.php" class="nav-item nav-link">Service</a>
                                 <a href="washingpoint.php" class="nav-item nav-link">washing point</a>
                                 <a href="about.php" class="nav-item nav-link active">About</a>
                                 <a href="contact.php" class="nav-item nav-link">Contact</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                <a href="index.php" class="nav-item nav-link active">Home</a>
+                                <a href="about.php" class="nav-item nav-link active">About</a>
+                                <a href="contact.php" class="nav-item nav-link">Contact</a>
+                                    <?php
+                                }
+                                
+                                ?>
                             </div>
                             <a href="#" class="nav-item nav-link" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
                              <!-- login -->
@@ -151,31 +162,14 @@
                     <h2>Developer</h2>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-4 col-md-7">
                         <div class="team-item">
                             <div class="team-img">
-                                <img src="" alt="Team Image">
+                                <img src="../design/img/profile.jpg" alt="Team Image" style="height: 300px;">
                             </div>
                             <div class="team-text">
-                                <h2>Thomas Olsen</h2>
-                                <p>Worker</p>
-                                <div class="team-social">
-                                    <a href=""><i class="fab fa-twitter"></i></a>
-                                    <a href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a href=""><i class="fab fa-linkedin-in"></i></a>
-                                    <a href=""><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="team-item">
-                            <div class="team-img">
-                                <img src="" alt="Team Image">
-                            </div>
-                            <div class="team-text">
-                                <h2>James Alien</h2>
-                                <p>Worker</p>
+                                <h2>Habibu J Muhangwa</h2>
+                                <p>student of arusha technical college</p>
                                 <div class="team-social">
                                     <a href=""><i class="fab fa-twitter"></i></a>
                                     <a href=""><i class="fab fa-facebook-f"></i></a>

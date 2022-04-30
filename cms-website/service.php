@@ -1,3 +1,8 @@
+<?php 
+    require "../php/weblogin.php";
+    // require '../php/functions.php';
+    
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -39,11 +44,24 @@
 
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto">
+                            <?php 
+                                if($_SESSION['$logsension'] == true){
+                                    ?>
                                 <a href="index.php" class="nav-item nav-link">Home</a>
                                 <a href="service.php" class="nav-item nav-link active">Service</a>
                                 <a href="washingpoint.php" class="nav-item nav-link">washing point</a>
                                 <a href="about.php" class="nav-item nav-link">About</a>
                                 <a href="contact.php" class="nav-item nav-link">Contact</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                <a href="index.php" class="nav-item nav-link active">Home</a>
+                                <a href="about.php" class="nav-item nav-link">About</a>
+                                <a href="contact.php" class="nav-item nav-link">Contact</a>
+                                    <?php
+                                }
+                                
+                                ?>
                             </div>
                             <a href="#" class="nav-item nav-link" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
                              <!-- login -->
@@ -215,46 +233,25 @@
                     <h2>What our clients say</h2>
                 </div>
                 <div class="owl-carousel testimonials-carousel">
+                <?php 
+                $compl = "SELECT * FROM complain";
+                $compl = mysqli_query($conn,$compl) or die("card error");
+                if(mysqli_num_rows($compl)>0){
+                    while($cpl = mysqli_fetch_assoc($compl)){
+                ?>
                     <div class="testimonial-item">
-                        <img src="" alt="Image">
+                        <!-- <img src="" alt="Image"> -->
                         <div class="testimonial-text">
                             <h3>Client Name</h3>
-                            <h4>Profession</h4>
                             <p>
-                                Lorem ipsum dolor sit amet elit. Phasel preti mi facilis ornare velit non vulputa. Aliqu metus tortor auctor gravid
+                               <?php  echo $cpl['complain'];?>
                             </p>
                         </div>
                     </div>
-                    <div class="testimonial-item">
-                        <img src="" alt="Image">
-                        <div class="testimonial-text">
-                            <h3>Client Name</h3>
-                            <h4>Profession</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet elit. Phasel preti mi facilis ornare velit non vulputa. Aliqu metus tortor auctor gravid
-                            </p>
-                        </div>
-                    </div>
-                    <div class="testimonial-item">
-                        <img src="" alt="Image">
-                        <div class="testimonial-text">
-                            <h3>Client Name</h3>
-                            <h4>Profession</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet elit. Phasel preti mi facilis ornare velit non vulputa. Aliqu metus tortor auctor gravid
-                            </p>
-                        </div>
-                    </div>
-                    <div class="testimonial-item">
-                        <img src="" alt="Image">
-                        <div class="testimonial-text">
-                            <h3>Client Name</h3>
-                            <h4>Profession</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet elit. Phasel preti mi facilis ornare velit non vulputa. Aliqu metus tortor auctor gravid
-                            </p>
-                        </div>
-                    </div>
+                    <?php 
+                    }
+                }
+                ?>
                 </div>
             </div>
         </div>

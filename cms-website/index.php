@@ -1,7 +1,7 @@
 <?php 
-    require "../php/sanitization.php";
-    session_start();
-    require '../php/functions.php';
+
+    require "../php/weblogin.php";
+    // require '../php/functions.php';
     $quer = "SELECT company.company_name,company.company_photo,company.company_description,owner.owner_first_name FROM company JOIN owner ON company.id_company = owner.id_company WHERE owner.role <> 'Admin'";
     $card = mysqli_query($conn,$quer) or die("card error");
 ?>
@@ -40,11 +40,24 @@
 
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto">
+                                <?php 
+                                if($_SESSION['$logsension'] == true){
+                                    ?>
                                 <a href="index.php" class="nav-item nav-link active">Home</a>
                                 <a href="service.php" class="nav-item nav-link">Service</a>
                                 <a href="washingpoint.php" class="nav-item nav-link">washing point</a>
                                 <a href="about.php" class="nav-item nav-link">About</a>
                                 <a href="contact.php" class="nav-item nav-link">Contact</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                <a href="index.php" class="nav-item nav-link active">Home</a>
+                                <a href="about.php" class="nav-item nav-link">About</a>
+                                <a href="contact.php" class="nav-item nav-link">Contact</a>
+                                    <?php
+                                }
+                                
+                                ?>
                             </div>
                             <a href="#" class="nav-item nav-link" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
                              <!-- login -->
@@ -56,17 +69,18 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body" style="background-color: #202C45;border-color: none;">
-                                        <form id="shw">
+                                        <form id="shw" method="POST">
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45; border-color: none;">
                                             <label for="recipient-name" class="col-form-label" style="color: #fff;">user name</label>
-                                            <input type="text" class="form-control" id="recipient-name">
+                                            <input type="text" class="form-control" id="recipient-name" name="username">
                                         </div>
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45;">
                                             <label for="recipient-name" class="col-form-label" style="color: #fff;">Password</label>
-                                            <input type="password" class="form-control" id="recipient-name">
+                                            <input type="password" class="form-control" id="recipient-name" name="password">
                                         </div>
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45;">
-                                            <button type="submit" class="form-control btn-primary">Login</button>
+                                            <button type="submit" class="form-control btn-primary" name="login">Login</button>
+                                            <small><?php foreach($errors as $erro){echo $erro."</br>";} ?></small>
                                         </div>
                                         </form>
                                         
@@ -349,44 +363,32 @@
         </div>
         <!-- Facts End -->
 
-        <!-- Testimonial Start -->
-        <div class="testimonial">
+       <!-- Testimonial Start -->
+       <div class="testimonial">
             <div class="container">
                 <div class="section-header text-center">
                     <h2>What our clients say</h2>
                 </div>
                 <div class="owl-carousel testimonials-carousel">
+                <?php 
+                $compl = "SELECT * FROM complain";
+                $compl = mysqli_query($conn,$compl) or die("card error");
+                if(mysqli_num_rows($compl)>0){
+                    while($cpl = mysqli_fetch_assoc($compl)){
+                ?>
                     <div class="testimonial-item">
-                        <img src="" alt="Image">
+                        <!-- <img src="" alt="Image"> -->
                         <div class="testimonial-text">
                             <h3>Client Name</h3>
-                            <h4>Profession</h4>
                             <p>
-                                Lorem ipsum dolor sit amet elit. Phasel preti mi facilis ornare velit non vulputa. Aliqu metus tortor auctor gravid
+                               <?php  echo $cpl['complain'];?>
                             </p>
                         </div>
                     </div>
-                    
-                    <div class="testimonial-item">
-                        <img src="" alt="Image">
-                        <div class="testimonial-text">
-                            <h3>Client Name</h3>
-                            <h4>Profession</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet elit. Phasel preti mi facilis ornare velit non vulputa. Aliqu metus tortor auctor gravid
-                            </p>
-                        </div>
-                    </div>
-                    <div class="testimonial-item">
-                        <img src="" alt="Image">
-                        <div class="testimonial-text">
-                            <h3>Client Name</h3>
-                            <h4>Profession</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet elit. Phasel preti mi facilis ornare velit non vulputa. Aliqu metus tortor auctor gravid
-                            </p>
-                        </div>
-                    </div>
+                    <?php 
+                    }
+                }
+                ?>
                 </div>
             </div>
         </div>
