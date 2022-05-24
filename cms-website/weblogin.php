@@ -1,10 +1,9 @@
 <?php
 // require 'db/connection.php';
-require "sanitization.php";
-session_start();
-require 'functions.php';
+require "../php/sanitization.php";
+// session_start();
+require '../php/functions.php';
 $errors = array();
-
 if (isset($_POST['login'])) {
     
     $username = mysqli_real_escape_string($conn, dataSanitizations($_POST['username']));
@@ -41,4 +40,25 @@ if (isset($_POST['login'])) {
         }
     }
 }
+
+if(isset($_POST['regist'])){
+        $first_name = mysqli_real_escape_string($conn, dataSanitizations($_POST['first_name']));
+        $second_name = mysqli_real_escape_string($conn, dataSanitizations($_POST['second_name']));
+        $last_name = mysqli_real_escape_string($conn, dataSanitizations($_POST['last_name']));
+        $email = mysqli_real_escape_string($conn, dataSanitizations($_POST['email']));
+        $phone = mysqli_real_escape_string($conn, dataSanitizations($_POST['phone']));
+        $password1 = mysqli_real_escape_string($conn, dataSanitizations($_POST['password1']));
+        $password2 = mysqli_real_escape_string($conn, dataSanitizations($_POST['password2']));
+        if(empty($first_name)){
+        ?>
+        <script type="text/javascript">
+        $(document).ready(function(){
+            $("#register").modal("show");
+        });
+        </script>
+    <?php
+}
+
+}
+
 ?>

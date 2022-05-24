@@ -1,6 +1,9 @@
 <?php 
+error_reporting(0);
+session_start();
 
-    require "../php/weblogin.php";
+// $_SESSION['$logsension'] = 0;
+    require "weblogin.php";
     // require '../php/functions.php';
     $quer = "SELECT company.company_name,company.company_photo,company.company_description,owner.owner_first_name FROM company JOIN owner ON company.id_company = owner.id_company WHERE owner.role <> 'Admin'";
     $card = mysqli_query($conn,$quer) or die("card error");
@@ -59,9 +62,20 @@
                                 
                                 ?>
                             </div>
-                            <a href="#" class="nav-item nav-link" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
+                            <?php 
+                                if($_SESSION['$logsension'] == true){
+                                    ?>
+                                    <a href="weblogout.php" class="nav-item nav-link" style="float: right;">logout</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                    <a href="#" class="nav-item nav-link" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
+                                <?php
+                                }
+                            
+                            ?>
                              <!-- login -->
-                                <div class="modal fade" id="exampleModal"  style="border: none; margin: none;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="exampleModal"  style="border: none; margin: none;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-keyboard="false">
                                 <div class="modal-dialog" style="margin: none;">
                                     <div class="modal-content">
                                     <div class="modal-header justfy-content-center" style="background-color: #202C45; ">
@@ -94,7 +108,7 @@
                              <!-- login -->
 
                              <!-- register -->
-                             <div class="modal fade" id="register"  style="border: none; margin: none;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                             <div class="modal fade" id="register"  style="border: none; margin: none;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-keyboard="false">
                                 <div class="modal-dialog" style="margin: none;">
                                     <div class="modal-content">
                                     <div class="modal-header justfy-content-center" style="background-color: #202C45; ">
@@ -102,41 +116,41 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body" style="background-color: #202C45;border-color: none;">
-                                        <form>
+                                        <form method="POST">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div id="fc" class="form-control mb-3" style="background-color: #202C45; border-color: none;">
                                                     <label for="recipient-name" class="col-form-label" style="color: #fff;">First Name</label>
-                                                    <input type="text" class="form-control" id="recipient-name">
+                                                    <input type="text" class="form-control" id="recipient-name" name="first_name">
                                                 </div>
                                                 <div id="fc" class="form-control mb-3" style="background-color: #202C45; border-color: none;">
                                                     <label for="recipient-name" class="col-form-label" style="color: #fff;">Second Name</label>
-                                                    <input type="text" class="form-control" id="recipient-name">
+                                                    <input type="text" class="form-control" id="recipient-name" name="second_name">
                                                 </div>
                                                 <div id="fc" class="form-control mb-3" style="background-color: #202C45; border-color: none;">
                                                     <label for="recipient-name" class="col-form-label" style="color: #fff;">Last Name</label>
-                                                    <input type="text" class="form-control" id="recipient-name">
+                                                    <input type="text" class="form-control" id="recipient-name" name="last_name">
                                                 </div>
                                                 <div id="fc" class="form-control mb-3" style="background-color: #202C45; border-color: none;">
                                                     <label for="recipient-name" class="col-form-label" style="color: #fff;">Email</label>
-                                                    <input type="text" class="form-control" id="recipient-name">
+                                                    <input type="text" class="form-control" id="recipient-name" name="email">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div id="fc" class="form-control mb-3" style="background-color: #202C45; border-color: none;">
                                                     <label for="recipient-name" class="col-form-label" style="color: #fff;">Phone no.</label>
-                                                    <input type="text" class="form-control" id="recipient-name">
+                                                    <input type="text" class="form-control" id="recipient-name" name="phone">
                                                 </div>
                                                 <div id="fc" class="form-control mb-3" style="background-color: #202C45;">
                                                     <label for="recipient-name" class="col-form-label" style="color: #fff;">Enter Password</label>
-                                                    <input type="password" class="form-control" id="recipient-name">
+                                                    <input type="password" class="form-control" id="recipient-name" name="password1">
                                                 </div>
                                                 <div id="fc" class="form-control mb-3" style="background-color: #202C45;">
                                                     <label for="recipient-name" class="col-form-label" style="color: #fff;">Confirm Password</label>
-                                                    <input type="password" class="form-control" id="recipient-name">
+                                                    <input type="password" class="form-control" id="recipient-name" name="password2">
                                                 </div>
                                                 <label for="recipient-name" class="col-form-label" style="color: #202C45;"></label>
-                                                <button type="submit" class="form-control btn-primary">Submit</button>
+                                                <button type="submit" class="form-control btn-primary" name="regist">Submit</button>
                                             </div>
                                         </div>
                                         </form>

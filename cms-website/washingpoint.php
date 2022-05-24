@@ -1,5 +1,7 @@
 <?php 
-    require "../php/weblogin.php";
+// error_reporting(0);
+session_start();
+    require "weblogin.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,56 +29,91 @@
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7nkdhgPZsOlAC4b3IWDAvTm3TSIaef7w&callback=initMap"    type="text/javascript"></script>
     <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
     <script>
+        // function getLocation() {
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(showPosition);
+        // } else {
+        //     alert("Geolocation is not supported by this browser.");
+        // }
+        // }
+        // function showPosition(position) {
+        // var lat = position.coord.latitude;
+        // var lng = position.coord.longitude;
+        // function mymark(){
+        //     console.log(lat);
+        // }
+        // map.setCenter(new google.maps.LatLng(lat, lng));
+        
+        // }
+        // var com = showPosition();
+        // com.mymark();
+    
         var icon = new google.maps.MarkerImage("http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
         new google.maps.Size(50, 50), new google.maps.Point(0, 0),
         new google.maps.Point(16, 32));
+
         // console.log(navigator.geolocation);
         const center = [-3.368277, 36.680892];
         var map = null;
         var currentPopup;
         var bounds = new google.maps.LatLngBounds();
+        // addMarker
         function addMarker(lat, lng, info) {
                 var pt = new google.maps.LatLng(lat, lng, info);
                 bounds.extend(pt);
                 var marker = new google.maps.Marker({
                     position: pt,
+                    // label: "A",
                     icon: icon,
-                    map: map
+                    map: map,
                 });
                 var popup = new google.maps.InfoWindow({
                     content: info,
                     maxWidth: 300
                 });
 
-        google.maps.event.addListener(marker, "click", function() {
-                if (currentPopup != null) {
-                currentPopup.close();
-                currentPopup = null;
-                }
-                popup.open(map, marker);
-                currentPopup = popup;
-        });
         google.maps.event.addListener(popup, "closeclick", function() {
+                map.setZoom(14);
                 map.panTo(center);
                 currentPopup = null;
         });
+
+
+        //map zoom
+        google.maps.event.addListener(marker, "click", function() {
+            map.setZoom(17);
+            map.setCenter(marker.getPosition());
+			if (currentPopup != null) {
+			currentPopup.close();
+			currentPopup = null;
+			}
+			popup.open(map, marker);
+			currentPopup = popup;
+	});
+
+
         }
         function initMap() {
+
             map = new google.maps.Map(document.getElementById("map"), {
+                // center: new google.maps.LatLng(navigator.geolocation.getCurrentPosition(function( position ){var mylatlong = position.coords.latitude + "," + position.coords.longitude;})),
                 center: new google.maps.LatLng(-3.368277, 36.680892),
-                zoom: 14,
+                zoom: 13,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 mapTypeControl: false,
                 mapTypeControlOptions: {
                 style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
                 },
-                navigationControl: true,
-                navigationControlOptions: {
-                style: google.maps.NavigationControlStyle.SMALL
-          }
+        
                 });
-
-
+// myyyyy locatiiii
+        //         const marker = new google.maps.Marker({
+        //     position: showPosition,
+        //     position: { lat: -3.368277, lng: 36.680892 },
+        //     map: map,
+        // });
+////////
+        // teke from data base
         $.getJSON('googlescript.php', function(items)
             {
             for (var i = 0; i < items.length; i++) {
@@ -135,7 +172,7 @@
                                     <?php
                                 }else{
                                     ?>
-                                <a href="index.php" class="nav-item nav-link active">Home</a>
+                                <a href="index.php" class="nav-item nav-link ">Home</a>
                                 <a href="about.php" class="nav-item nav-link">About</a>
                                 <a href="contact.php" class="nav-item nav-link">Contact</a>
                                     <?php
@@ -143,7 +180,18 @@
                                 
                                 ?>
                             </div>
-                            <a href="#" class="nav-item nav-link" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
+                            <?php 
+                                if($_SESSION['$logsension'] == true){
+                                    ?>
+                                    <a href="weblogout.php" class="nav-item nav-link" style="float: right;">logout</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                    <a href="#" class="nav-item nav-link" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
+                                <?php
+                                }
+                            
+                            ?>
                              <!-- login -->
                              <div class="modal fade" id="exampleModal"  style="border: none; margin: none;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" style="margin: none;">
@@ -153,17 +201,18 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body" style="background-color: #202C45;border-color: none;">
-                                        <form id="shw">
+                                        <form id="shw" method="POST">
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45; border-color: none;">
                                             <label for="recipient-name" class="col-form-label" style="color: #fff;">user name</label>
-                                            <input type="text" class="form-control" id="recipient-name">
+                                            <input type="text" class="form-control" id="recipient-name" name="username">
                                         </div>
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45;">
                                             <label for="recipient-name" class="col-form-label" style="color: #fff;">Password</label>
-                                            <input type="password" class="form-control" id="recipient-name">
+                                            <input type="password" class="form-control" id="recipient-name" name="password">
                                         </div>
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45;">
-                                            <button type="submit" class="form-control btn-primary">Login</button>
+                                            <button type="submit" class="form-control btn-primary" name="login">Login</button>
+                                            <small><?php foreach($errors as $erro){echo $erro."</br>";} ?></small>
                                         </div>
                                         </form>
                                         

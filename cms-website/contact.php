@@ -1,5 +1,7 @@
 <?php 
-    require "../php/weblogin.php";
+error_reporting(0);
+session_start();
+    require "weblogin.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +55,7 @@
                                     <?php
                                 }else{
                                     ?>
-                                <a href="index.php" class="nav-item nav-link active">Home</a>
+                                <a href="index.php" class="nav-item nav-link">Home</a>
                                 <a href="about.php" class="nav-item nav-link">About</a>
                                 <a href="contact.php" class="nav-item nav-link active">Contact</a>
                                     <?php
@@ -61,7 +63,18 @@
                                 
                                 ?>
                             </div>
-                            <a href="#" class="nav-item nav-link" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
+                            <?php 
+                                if($_SESSION['$logsension'] == true){
+                                    ?>
+                                    <a href="weblogout.php" class="nav-item nav-link" style="float: right;">logout</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                    <a href="#" class="nav-item nav-link" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
+                                <?php
+                                }
+                            
+                            ?>
                              <!-- login -->
                              <div class="modal fade" id="exampleModal"  style="border: none; margin: none;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" style="margin: none;">
@@ -71,17 +84,18 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body" style="background-color: #202C45;border-color: none;">
-                                        <form id="shw">
+                                        <form id="shw" method="POST">
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45; border-color: none;">
                                             <label for="recipient-name" class="col-form-label" style="color: #fff;">user name</label>
-                                            <input type="text" class="form-control" id="recipient-name">
+                                            <input type="text" class="form-control" id="recipient-name" name="username">
                                         </div>
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45;">
                                             <label for="recipient-name" class="col-form-label" style="color: #fff;">Password</label>
-                                            <input type="password" class="form-control" id="recipient-name">
+                                            <input type="password" class="form-control" id="recipient-name" name="password">
                                         </div>
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45;">
-                                            <button type="submit" class="form-control btn-primary">Login</button>
+                                            <button type="submit" class="form-control btn-primary" name="login">Login</button>
+                                            <small><?php foreach($errors as $erro){echo $erro."</br>";} ?></small>
                                         </div>
                                         </form>
                                         
@@ -180,7 +194,7 @@
                                 </div>
                                 <div class="contact-info-text">
                                     <h3>Call Us</h3>
-                                    <p>+012 345 6789</p>
+                                    <p>+255 752 932 680</p>
                                 </div>
                             </div>
                             <div class="contact-info-item">
@@ -189,7 +203,7 @@
                                 </div>
                                 <div class="contact-info-text">
                                     <h3>Email Us</h3>
-                                    <p>info@example.com</p>
+                                    <p>habibujumanne80@gmail.com</p>
                                 </div>
                             </div>
                         </div>
@@ -231,7 +245,7 @@
         <div class="footer">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-4 col-md-7">
+                    <div class="col-lg-6 col-md-11">
                         <div class="footer-contact">
                             <h2>Get In Touch</h2>
                             <p><i class="fa fa-map-marker-alt"></i>atc, Arusha, TANZANIA</p>
@@ -246,23 +260,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-7">
+                    <div class="col-lg-6 col-md-9">
                         <div class="footer-link">
                             <h2>Popular Links</h2>
                             <a href="about.php">About Us</a>
                             <a href="contact.php">Contact Us</a>
                             <a href="service.php">Our Service</a>
                             <a href="washingpoint.php">Service Points</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-7">
-                        <div class="footer-newsletter">
-                            <h2>Newsletter</h2>
-                            <form>
-                                <input class="form-control" placeholder="Full Name">
-                                <input class="form-control" placeholder="Email">
-                                <button class="btn btn-custom">Submit</button>
-                            </form>
                         </div>
                     </div>
                 </div>

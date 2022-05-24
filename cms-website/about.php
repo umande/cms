@@ -1,5 +1,7 @@
 <?php 
-    require "../php/weblogin.php";
+error_reporting(0);
+session_start();
+    require "weblogin.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -53,7 +55,7 @@
                                     <?php
                                 }else{
                                     ?>
-                                <a href="index.php" class="nav-item nav-link active">Home</a>
+                                <a href="index.php" class="nav-item nav-link">Home</a>
                                 <a href="about.php" class="nav-item nav-link active">About</a>
                                 <a href="contact.php" class="nav-item nav-link">Contact</a>
                                     <?php
@@ -61,7 +63,18 @@
                                 
                                 ?>
                             </div>
-                            <a href="#" class="nav-item nav-link" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
+                            <?php 
+                                if($_SESSION['$logsension'] == true){
+                                    ?>
+                                    <a href="weblogout.php" class="nav-item nav-link" style="float: right;">logout</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                    <a href="#" class="nav-item nav-link" style="float: right;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
+                                <?php
+                                }
+                            
+                            ?>
                              <!-- login -->
                              <div class="modal fade" id="exampleModal"  style="border: none; margin: none;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" style="margin: none;">
@@ -71,17 +84,18 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body" style="background-color: #202C45;border-color: none;">
-                                        <form id="shw">
+                                        <form id="shw" method="POST">
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45; border-color: none;">
                                             <label for="recipient-name" class="col-form-label" style="color: #fff;">user name</label>
-                                            <input type="text" class="form-control" id="recipient-name">
+                                            <input type="text" class="form-control" id="recipient-name" name="username">
                                         </div>
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45;">
                                             <label for="recipient-name" class="col-form-label" style="color: #fff;">Password</label>
-                                            <input type="password" class="form-control" id="recipient-name">
+                                            <input type="password" class="form-control" id="recipient-name" name="password">
                                         </div>
                                         <div id="fc" class="form-control mb-3" style="background-color: #202C45;">
-                                            <button type="submit" class="form-control btn-primary">Login</button>
+                                            <button type="submit" class="form-control btn-primary" name="login">Login</button>
+                                            <small><?php foreach($errors as $erro){echo $erro."</br>";} ?></small>
                                         </div>
                                         </form>
                                         
