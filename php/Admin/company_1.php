@@ -95,14 +95,16 @@
 															$cmpwrk = mysqli_query($conn,$q2);
 															$cmpwrk = mysqli_fetch_assoc($cmpwrk);
 														?>
-														<tr>
+														<tr id="<?php echo$company['id_company'];?>">
 															<td scope="row" id="tfont"><?php echo $sn++?></td>
 															<td id="tfont"><?php echo $company['company_name']; ?></td>
 															<td id="tfont"><?php echo $company['company_certificate']; ?></td>
 															<td id="tfont"><?php echo $company['district']; ?></td>
 															<td id="tfont"><?php echo $company['owner_first_name']; ?></td>
 															<td id="tfont"><?php echo $cmpwrk['wn']; ?></td>
-															<td id="tfont" class="td-actions text-center"><a href="company_1_edit.php?update=<?php echo$company['id_company'];?>"><i class="la la-edit" title="Edit"></i></a> <a href="company_1_delete.php?delete=<?php echo$company['id_company'];?>"><i class="la la-times text-danger" title="Remove"></i</a></td>
+															<!-- <td id="tfont" class="td-actions text-center"><a href="company_1_edit.php?update=<?php echo$company['id_company'];?>"><i class="la la-edit" title="Edit"></i></a> <button class="remove"><i class="la la-times text-danger" title="Remove"></i</button class="remove"></td> -->
+															<td id="tfont" class="td-actions text-center"><a href="company_1_edit.php?update=<?php echo$company['id_company'];?>"><i class="la la-edit" title="Edit"></i></a> <a href="#"><i class="la la-times text-danger remove" title="Remove"></i</a></td>
+															
 														</tr>
 														
 														<?php
@@ -126,6 +128,52 @@
 				</div>
 			</div>
 			<!-- end of pannel or container -->
+			<script type="text/javascript">
+				function reset () {
+					$("#toggleCSS").attr("href", "../../design/lib/themes/alertify.default.css");
+					alertify.set({
+						labels : {
+							ok     : "OK",
+							cancel : "Cancel"
+						},
+						delay : 5000,
+						buttonReverse : false,
+						buttonFocus   : "ok"
+					});
+				}
+				$(".remove").click(function(){
+					var id = $(this).parents("tr").attr("id");
+					// if(alertify.confirm('Are you sure you want to delete this record permanet?')){
+						alertify.confirm("Are you sure you want to delete this record permanet?", function (e) {
+							if (e) {
+								$.ajax({
+									url: 'company_1_delete.php',
+									type: 'GET',
+									data: {id : id},
+									error: function() {
+										alertify.alert('something is wrong');
+									},
+									success: function(data){
+										$("#"+id).remove();
+										alertify.alert("Record removed successfully");
+									}
+
+								});
+								location.reload();
+								return false;
+								// alertify.alert("Successful AJAX after OK");
+							} else {
+								alertify.alert("Your Cancel!");
+							}
+					});
+				});
+
+			</script>
 <?php 
 	require "dashfoot.php";
 ?>
+
+
+
+
+						

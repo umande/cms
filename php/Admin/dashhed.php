@@ -17,6 +17,9 @@
 	<link href="../../design/css/Filter.css" rel="stylesheet">
 	<script src="../../design/js/core/jquery-1.12.4.min.js"></script>
 	<link rel="stylesheet" href="../../design/css/style2.css">
+	<link rel="stylesheet" href="../../design/lib/themes/alertify.core.css">
+	<link rel="stylesheet" href="../../design/lib/themes/alertify.default.css" id="toggleCSS">
+
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7nkdhgPZsOlAC4b3IWDAvTm3TSIaef7w&callback=initMap"    type="text/javascript"></script>
     <script type="text/javascript" src="../../design/js/jquery.min.js"></script>
@@ -419,6 +422,8 @@
             color: black;
         }
 	</style>
+	<script src="../../design/lib/alertify.min.js"></script>
+	<script src="../../design/js/jquery-1.9.1.js"></script>
 </head>
 <body onload="initMap()">
 	<div class="wrapper">

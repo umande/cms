@@ -12,6 +12,9 @@ if (isset($_POST['login'])) {
     if (empty($username)) {
         array_push($errors, "username is required");
     }
+    if (is_numeric($username)) {
+        array_push($errors, "username can't be a number");
+    }
     
     if (empty($password)) {
         array_push($errors, "Password is required");

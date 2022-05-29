@@ -4,9 +4,10 @@
 	$Q1 = mysqli_query($conn,$Q);
 	$prof = mysqli_fetch_assoc($Q1);
 	$cm_id = $prof['id_company'];
+	var_dump($cm_id);
 	$QQ = "SELECT company_name,company_description,company_photo FROM company WHERE id_company = $cm_id";
 
-	$Q2 = mysqli_query($conn,$QQ);
+	$Q2 = mysqli_query($conn,$QQ) or die("die from profile");
 	$cm_n = mysqli_fetch_assoc($Q2);
 
 

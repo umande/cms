@@ -12,10 +12,10 @@ require '../db/connection.php';
 //     header("Location: ../index.php");
 // }
 
-if(isset($_GET['delete'])){
+if(isset($_GET['id'])){
 
-    $id = $_GET['delete'];
-    $delete = "DELETE FROM company WHERE id_company = $id";
+    // $id = $_GET['id'];
+    $delete = "DELETE FROM company WHERE id_company =".$_GET['id'];
     $query = mysqli_query($conn,$delete) or die("wrong");
     if($query){
         // $msg= "<p class='alter alert-danger fw-bold text-danger mt-2' style='text-align:center;'>row are deleted</p>";

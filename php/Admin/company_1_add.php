@@ -1,9 +1,9 @@
 <?php 
 	require "../db/connection.php";
     require "../sanitization.php";
-    
+    // $company=$certificate=$first_name=$second_name=$last_name=$email=$address=$phone=$description=$areaname;
 	require "dashhed.php";
-	$error = array();
+	$error = new SplFixedArray(10);
      if(isset($_POST['update1'])){
 
         $company = mysqli_real_escape_string($conn, dataSanitizations($_POST['company']));
@@ -28,63 +28,92 @@
         $endi = explode(".",$endi);
         $endi = end($endi);
         // $endi = strtolower(end(explode(".",$fname)));
+
+        if(empty($company)){
+            $error[0] = "enter company name";
+        }
+        if (!preg_match("/^[a-zA-Z ]*$/",$company)) {
+            $error[0] = "Only letters and white space allowed";
+          }
+        if(empty($certificate)){
+            $error[1] = "enter certificate";
+        }
+
         $new_name = uniqid("",true);
         if(in_array($endi,$allowed)){
             if($fsize < 5000000){
                 if(!$er){
                     
                 }else{
-                    array_push($error,"error sending");
+                    $error[2] = "error sending";
                 }
             }else{
-                array_push($error,"file to rage");
+                $error[2] = "file to rage";
             }
             
         }else{
-            array_push($error,"that file is not an image");
+            $error[2] = "this file is not an image";
         }
-
-        if(empty($company)){
-            array_push($error,"enter company name");
-        }
-        if(empty($certificate)){
-            array_push($error,"enter certificate");
+        
+        if(empty($fname)){
+            $error[2] = "upload image";
         }
         if(empty($first_name)){
-            array_push($error,"enter first name");
+            $error[3] = "enter first name";
         }
+        if (!preg_match("/^[a-zA-Z ]*$/",$first_name)) {
+            $error[3] = "Only letters and white space allowed";
+          }
         if(empty($second_name)){
-            array_push($error,"enter second name");
+            $error[4] = "enter second name";
         }
+        if (!preg_match("/^[a-zA-Z ]*$/",$second_name)) {
+            $error[4] = "Only letters and white space allowed";
+          }
         if(empty($last_name)){
-            array_push($error,"enter last name");
+            $error[5] = "Enter last name";
+        }
+        if (!preg_match("/^[a-zA-Z ]*$/",$last_name)) {
+            $error[5] = "Only letters and white space allowed";
         }
         if(empty($email)){
-            array_push($error,"enter email");
+            $error[6] = "Enter email";
         }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error[6] = "Invalid email format";
+          }
         if(empty($address)){
-            array_push($error,"enter address");
+            $error[7] = "enter address";
+        }
+        if (!preg_match("/^[a-zA-Z ]*$/",$address)) {
+            $error[7] = "Only letters and white space allowed";
+          }
+        if (!preg_match("/^[0]{1}[0-9]{9}+$/",$phone)) {
+            $error[8] = "Enter valid phone number";
         }
         if(empty($phone)){
-            array_push($error,"enter phone number");
+            $error[8] = "enter phone number";
         }
         if(empty($description)){
-            array_push($error,"enter company description");
+            $error[9] = "enter company description";
         }
-        if(empty($areaname)){
-            array_push($error,"enter area");
-        }
+        
 
         $query5 = "SELECT id_area FROM area WHERE district = '$areaname'";
         $query5 = mysqli_query($conn,$query5);
         $idar = mysqli_fetch_assoc($query5);
         $idr = intval($idar['id_area']);
-        if(empty($error)){
-            
-            
+        $GLOBALS['exart'] = 0;
+        foreach($error as $k => $val){
+            if($val == NULL){
+                $exart+=1; 
+            }
+        }
+        if(isset($error) && $exart == 10){
+
             move_uploaded_file($ftemp,'../../design/img/'.$new_name.'.'.$endi);
             $photo = "$new_name.$endi";
-
+            
             $updt = "INSERT INTO company(company_name,company_certificate,company_photo,company_description,id_area) VALUE('$company','$certificate','$photo','$description',$idr)";
             $query = mysqli_query($conn,$updt) or die("companny error");
 
@@ -161,34 +190,28 @@
                                             Register Company
                                         </h4>
                                     </div>
-                                    <?php foreach($error as $er){
-                                        ?>
-                                        <p><?php echo $er; ?></p>
-                                        <?php
-                                    } 
-                                    ?>
                                 <div class="col-md-12">
 									<div class="card-body col-md-12">
                                         
-									    <form action="" onsubmit="return chk()"  method="post" enctype="multipart/form-data" id="form">
+									    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" onsubmit="return chk()"  method="post" enctype="multipart/form-data" id="form">
                                             <!--  -->
                                             <div class="row">
                                                 <!--  -->
                                                 <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="text">Company Name</label>
-                                                <input type="text" class="form-control form-control-sm" name="company" id="cname" placeholder="eg. Dew carwash">
-                                                <div class="err" style="color: red;"></div>
+                                                <input type="text" class="form-control form-control-sm" value="<?php if(!empty($company)){echo $company;} ?>" name="company" id="cname" placeholder="eg. Dew carwash">
+                                                <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[0]; }?></div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="text">Certificate</label>
-                                                <input type="text" class="form-control form-control-sm" name="certificate" id="certi" placeholder="eg. Td63d733">
-                                                <div class="err" style="color: red;"></div>
+                                                <input type="text" class="form-control form-control-sm" value="<?php if(!empty($certificate)){echo $certificate;} ?>" name="certificate" id="certi" placeholder="eg. Td63d733">
+                                                <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[1]; }?></div>
                                             </div>
                                             <div class="form-group">
 												<label for="exampleFormControlFile1">Company Photo</label>
 												<input type="file" class="form-control-file" name="fileupload" id="pht" style="background-color: #87ceeb;">
-                                                <div class="err"></div>
+                                                <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[2]; }?></div>
                                             </div>
                                             <div class="form-group">
 												<label for="solidSelect">Area</label>
@@ -206,48 +229,47 @@
 											</div>
                                             <div class="form-group">
                                                 <label for="text">First Name</label>
-                                                <input type="text" class="form-control form-control-sm" name="first_name" id="fnam" placeholder="eg. habibu">
-                                                <div class="err" style="color: red;"></div>
+                                                <input type="text" class="form-control form-control-sm" value="<?php if(!empty($first_name)){echo $first_name;} ?>" name="first_name" id="fnam" placeholder="eg. habibu">
+                                                <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[3]; }?></div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="text">Second Name</label>
-                                                <input type="text" class="form-control form-control-sm" name="second_name" id="snam" placeholder="eg. jumanne">
-                                                <div class="err" style="color: red;"></div>
+                                                <input type="text" class="form-control form-control-sm" value="<?php if(!empty($second_name)){echo $second_name;} ?>" name="second_name" id="snam" placeholder="eg. jumanne">
+                                                <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[4]; }?></div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="text">Last Name</label>
-                                                <input type="text" class="form-control form-control-sm" name="last_name" id="lnam" placeholder="eg. mhangwa">
-                                                <div class="err" style="color: red;"></div>
+                                                <input type="text" class="form-control form-control-sm" value="<?php if(!empty($last_name)){echo $last_name;} ?>" name="last_name" id="lnam" placeholder="eg. mhangwa">
+                                                <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[5]; }?></div>
                                             </div>
                                             </div>
                                             <!--  -->
                                             <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="text">Email</label>
-                                                <input type="text" class="form-control form-control-sm" name="email" id="em" placeholder="eg. habibujumane80@gmail.com">
-                                                
-                                                <div class="err" style="color: red;"></div>
+                                                <input type="text" class="form-control form-control-sm" value="<?php if(!empty($email)){echo $email;} ?>" name="email" id="em" placeholder="eg. habibujumane80@gmail.com">
+                                                <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[6]; }?></div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="text">Phone</label>
-                                                <input type="text" class="form-control form-control-sm" name="phone" id="ph" placeholder="eg. 0752932680">
-                                                <div class="err" style="color: red;"></div>
+                                                <input type="text" class="form-control form-control-sm" value="<?php if(!empty($phone)){echo $phone;} ?>" name="phone" id="ph" placeholder="eg. 0752932680">
+                                                <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[8]; }?></div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="text">Address</label>
-                                                <input type="text" class="form-control form-control-sm" name="address" id="add" placeholder="eg. mianzini">
-                                                <div class="err" style="color: red;"></div>
+                                                <input type="text" class="form-control form-control-sm" value="<?php if(!empty($address)){echo $address;} ?>" name="address" id="add" placeholder="eg. mianzini">
+                                                <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[7]; }?></div>
                                             </div>
                                             
                                             <div class="form-group">
 												<label for="comment">Discription</label>
-												<textarea class="form-control" rows="5" name="description" id="des">
+												<textarea class="form-control" rows="5" value="<?php if(!empty($description)){echo $description;} ?>" name="description" id="des">
                                                 
 												</textarea>
-                                                <div class="err" style="color: red;"></div>
+                                                <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[9]; }?></div>
 											</div>
                                             
                                             <div class="form-check">
@@ -262,7 +284,7 @@
                                                 </label>
                                             </div>
                                             <div class="card-action">
-                                                <input type="submit" class="btn btn-success mt-3 form-control" name="update1" id="submit" onsubmit="return chk()" value="Submit">
+                                                <input type="submit" class="btn btn-success mt-3 form-control" name="update1" id="submit" value="Submit">
                                                 
                                             </div>
                                             </div>
