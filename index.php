@@ -20,33 +20,19 @@
         <div class="image"></div>
       </div>
       <form id="form" action="" method="post">
-        <div class="title">
-          <h3>LOGIN</h3>
-        </div>
-
+        <div class="title"> <h3>LOGIN</h3> </div>
         <div>
           <label for="email">User Name</label>
           <i class="far fa-user"></i>
-          <input
-            type="text"
-            name="username"
-            id="email"
-            placeholder="habibu@gmail.com"
-          />
+          <input type="text" name="username" value="<?php if(!empty($username)){ echo $username; } ?>" id="email" placeholder="habibu@gmail.com" />
           <i class="fas fa-exclamation-circle failure-icon"></i>
           <i class="far fa-check-circle success-icon"></i>
           <div class="error"></div>
         </div>
-
         <div>
           <label for="password">Password</label>
           <i class="fas fa-lock"></i>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password here"
-          />
+          <input type="password" name="password" value="<?php if(!empty($password)){ echo $password; } ?>" id="password" placeholder="Password here" />
           <i class="fas fa-exclamation-circle failure-icon"></i>
           <i class="far fa-check-circle success-icon"></i>
           <div class="error"></div>

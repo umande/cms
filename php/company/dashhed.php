@@ -17,6 +17,8 @@
 	<link href="../../design/css/Filter.css" rel="stylesheet">
 	<script src="../../design/js/core/jquery-1.12.4.min.js"></script>
 	<link rel="stylesheet" href="../../design/css/style2.css">
+	<link rel="stylesheet" href="../../design/lib/themes/alertify.core.css">
+	<link rel="stylesheet" href="../../design/lib/themes/alertify.default.css" id="toggleCSS">
 	<style>
 			.la{
   /* color: wh; */
@@ -327,6 +329,8 @@
 				box-shadow: 0 1px 2px rgba(13, 110, 253, 0.4);
 			}
 	</style>
+	<script src="../../design/lib/alertify.min.js"></script>
+	<script src="../../design/js/jquery-1.9.1.js"></script>
 </head>
 <body>
 	<div class="wrapper">

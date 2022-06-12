@@ -92,14 +92,14 @@
 													$sn=1;
 													while($user=mysqli_fetch_assoc($result)){
 													?>
-													<tr>
+													<tr id="<?php echo$user['id_customer'];?>">
 														<td scope="row" id="tfont"><?php echo $sn++?></td>
 														<td id="tfont"><?php echo $user['customer_first_name']." ".$user['customer_second_name'];?></td>
 														<td id="tfont"><?php echo $user['customer_email'];?></td>
 														<td id="tfont"><?php echo $user['customer_address'];?></td>
-														<td id="tfont"><?php echo "+255 ".$user['customer_phone'];?></td>
+														<td id="tfont"><?php echo $user['customer_phone'];?></td>
 														<td id="tfont"><?php echo $user['id_booking'];?></td>
-                                                        <td id="tfont" class="td-actions text-center"><a href="customer_1_edit.php?update=<?php echo$user['id_customer'];?>"><i class="la la-edit" title="Edit"></i></a> <a href="customer_1_delete.php?delete=<?php echo$user['id_customer'];?>"><i class="la la-times text-danger" title="Remove"></i</a></td>
+                                                        <td id="tfont" class="td-actions text-center"><a href="customer_1_edit.php?update=<?php echo$user['id_customer'];?>"><i class="la la-edit" title="Edit"></i></a> <a href="#"><i class="la la-times text-danger remove" title="Remove"></i</a></td>
 													</tr>
 													
 													<?php
@@ -122,6 +122,47 @@
 				</div>
 			</div>
 			<!-- end of pannel or container -->
+			<script type="text/javascript">
+				function reset () {
+					$("#toggleCSS").attr("href", "../../design/lib/themes/alertify.default.css");
+					alertify.set({
+						labels : {
+							ok     : "OK",
+							cancel : "Cancel"
+						},
+						delay : 5000,
+						buttonReverse : false,
+						buttonFocus   : "ok"
+					});
+				}
+				$(".remove").click(function(){
+					var id = $(this).parents("tr").attr("id");
+					// if(alertify.confirm('Are you sure you want to delete this record permanet?')){
+						alertify.confirm("Are you sure you want to delete this record permanet?", function (e) {
+							if (e) {
+								$.ajax({
+									url: 'customer_1_delete.php',
+									type: 'GET',
+									data: {id : id},
+									error: function() {
+										alertify.alert('something is wrong');
+									},
+									success: function(data){
+										$("#"+id).remove();
+										alertify.alert("Record removed successfully");
+									}
+
+								});
+								location.reload();
+								return false;
+								// alertify.alert("Successful AJAX after OK");
+							} else {
+								alertify.alert("Your Cancel!");
+							}
+					});
+				});
+
+			</script>
 <?php 
 	require "dashfoot.php";
 ?>

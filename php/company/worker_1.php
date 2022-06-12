@@ -95,7 +95,7 @@
 														// $company = mysqli_query($conn,$qrr);
 														// $company = mysqli_fetch_assoc($company);
 														?>
-														<tr>
+														<tr id="<?php echo $worker['id']; ?>" >
 															<td scope="row" id="tfont"><?php echo $sn++?></td>
 															<td id="tfont"><?php echo $worker['worker_first_name']." ".$worker['worker_second_name'];?></td>
 															<td id="tfont"><?php echo $worker['worker_last_name'];?></td>
@@ -103,7 +103,7 @@
 															<td id="tfont"><?php echo $worker['worker_email']; ?></td>
 															<td id="tfont"><?php echo $worker['worker_address'];?></td>
 															<td id="tfont"><?php echo $worker['id_schedule'];?></td>
-															<td id="tfont" class="td-actions text-center"><a href="worker_1_edit.php?w_update=<?php echo$worker['id'];?>"><i class="la la-edit" title="Edit"></i></a> <a href="worker_1_delet.php?delete=<?php echo$worker['id'];?>"><i class="la la-times text-danger" title="Remove"></i</a></td>
+															<td id="tfont" class="td-actions text-center"><a href="worker_1_edit.php?w_update=<?php echo$worker['id'];?>"><i class="la la-edit" title="Edit"></i></a> <a href="#"><i class="la la-times text-danger remove" title="Remove"></i</a></td>
 														</tr>
 														<?php
 														}  }
@@ -126,6 +126,47 @@
 				</div>
 			</div>
 			<!-- end of pannel or container -->
+			<script type="text/javascript">
+				function reset () {
+					$("#toggleCSS").attr("href", "../../design/lib/themes/alertify.default.css");
+					alertify.set({
+						labels : {
+							ok     : "OK",
+							cancel : "Cancel"
+						},
+						delay : 5000,
+						buttonReverse : false,
+						buttonFocus   : "ok"
+					});
+				}
+				$(".remove").click(function(){
+					var id = $(this).parents("tr").attr("id");
+					// if(alertify.confirm('Are you sure you want to delete this record permanet?')){
+						alertify.confirm("Are you sure you want to delete this record permanet?", function (e) {
+							if (e) {
+								$.ajax({
+									url: 'worker_1_delet.php',
+									type: 'GET',
+									data: {id : id},
+									error: function() {
+										alertify.alert('something is wrong');
+									},
+									success: function(data){
+										$("#"+id).remove();
+										alertify.alert("Record removed successfully");
+									}
+
+								});
+								location.reload();
+								return false;
+								// alertify.alert("Successful AJAX after OK");
+							} else {
+								alertify.alert("Your Cancel!");
+							}
+					});
+				});
+
+			</script>
 <?php 
 	require "dashfoot.php";
 ?>

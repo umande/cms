@@ -47,7 +47,7 @@ if (isset($_POST['login'])) {
             }
         } else {
 
-            array_push($errors, "Invalid credentials");
+            array_push($errors, "wrong username and password");
 
         }
     }

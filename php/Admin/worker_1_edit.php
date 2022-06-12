@@ -4,6 +4,7 @@
 	require "dashhed.php";
     ob_start();
 	
+    $error = new SplFixedArray(8);
     if(isset($_GET['w_update'])){
         $id = $_GET['w_update'];
     
@@ -31,17 +32,68 @@
         $bd = mysqli_real_escape_string($conn, dataSanitizations($_POST['bd']));
         $sx = mysqli_real_escape_string($conn, dataSanitizations($_POST['optionsRadios']));
         
-         $update = "UPDATE worker SET worker_first_name = '$first_name', worker_second_name = '$second_name', worker_last_name = '$last_name', worker_email = '$email', worker_phone = '$phone', worker_address = '$address', worker_date_of_bath = '$bd', sex = '$sx'  WHERE worker.id = $id";
+        if(empty($first_name)){
+            $error[0] = "enter first name";
+         }
+         if (!preg_match("/^[a-zA-Z ]*$/",$first_name)) {
+             $error[0] = "Only letters and white space allowed";
+           }
+         if(empty($second_name)){
+             $error[1] = "enter second name";
+         }
+         if (!preg_match("/^[a-zA-Z ]*$/",$second_name)) {
+             $error[1] = "Only letters and white space allowed";
+           }
+         if(empty($last_name)){
+             $error[2] = "Enter last name";
+         }
+         if (!preg_match("/^[a-zA-Z ]*$/",$last_name)) {
+             $error[2] = "Only letters and white space allowed";
+         }
+         if(empty($email)){
+             $error[3] = "Enter email";
+         }
+         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+             $error[3] = "Invalid email format";
+           }
+         if(empty($address)){
+             $error[4] = "enter address";
+         }
+         if (!preg_match("/^[a-zA-Z ]*$/",$address)) {
+             $error[4] = "Only letters and white space allowed";
+           }
+         if (!preg_match("/^[0]{1}[0-9]{9}+$/",$phone)) {
+             $error[5] = "Enter valid phone number";
+         }
+         if(empty($phone)){
+             $error[5] = "enter phone number";
+         }
+         if(empty($bd)){
+             $error[6] = "enter date of barth";
+         }
+         if(empty($sx)){
+            $error[7] = "enter gender";
+        }
+        $GLOBALS['exart'] = 0;
+         foreach($error as $k => $val){
+             if($val == NULL){
+                 $exart+=1; 
+             }
+         }
+         if(isset($error) && $exart == 8){
+            $update = "UPDATE worker SET worker_first_name = '$first_name', worker_second_name = '$second_name', worker_last_name = '$last_name', worker_email = '$email', worker_phone = '$phone', worker_address = '$address', worker_date_of_bath = '$bd', sex = '$sx'  WHERE worker.id = $id";
        
-         $query = mysqli_query($conn,$update) or die("erro query");
-    
-         $msg = "";
-         if($query){
-            // header("Location : worker_1.php"); 
-            ?>
-            <script>location = "worker_1.php";</script>
-            <?php
-         } 
+            $query = mysqli_query($conn,$update) or die("erro query");
+       
+            $msg = "";
+            if($query){
+               // header("Location : worker_1.php"); 
+               ?>
+               <script>location = "worker_1.php";</script>
+               <?php
+            }
+         }
+          
     }
 ?>
 			<ul class="nav">
@@ -104,34 +156,41 @@
                                                     <div class="form-group">
                                                         <label for="text">First Name</label>
                                                         <input type="text" class="form-control form-control-sm" id="smallInput" name="first_name" value="<?php echo $worker['worker_first_name']; ?>">
+                                                        <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[0]; }?></div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="text">Middle Name</label>
                                                         <input type="text" class="form-control form-control-sm" id="smallInput" name="second_name" value="<?php echo $worker['worker_second_name']; ?>">
+                                                        <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[1]; }?></div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="text">Last name</label>
                                                         <input type="text" class="form-control form-control-sm" id="smallInput" name="last_name" value="<?php echo $worker['worker_last_name']; ?>">
+                                                        <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[2]; }?></div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="email">Email Address</label>
                                                         <input type="email" class="form-control form-control-sm" id="smallInput" name="email" value="<?php echo $worker['worker_email']; ?>">
+                                                        <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[3]; }?></div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="text">Place</label>
                                                             <input type="text" class="form-control form-control-sm" id="smallInput" name="address" value="<?php echo $worker['worker_address']; ?>">
+                                                            <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[4]; }?></div>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="text">Phone</label>
                                                             <input type="text" class="form-control form-control-sm" id="smallInput" name="phone" value="<?php echo $worker['worker_phone']; ?>">
+                                                            <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[5]; }?></div>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="text">Date of barth</label>
                                                             <input type="text" class="form-control form-control-sm" id="smallInput" name="bd" value="<?php echo $worker['worker_date_of_bath']; ?>">
+                                                            <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[6]; }?></div>
                                                         </div>
                                                         
                                                         <div class="form-check">
@@ -144,6 +203,7 @@
                                                                 <input class="form-radio-input" type="radio" name="optionsRadios" value="female" <?php echo ($worker['sex'] == "female") ? "checked" : "";?> >
                                                                 <span class="form-radio-sign">Female</span>
                                                             </label>
+                                                            <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[7]; }?></div>
                                                         </div>
                                                         <div class="card-action" id="card-action">
                                                             <button class="btn btn-success mt-3 form-control" name="worker_update">update</button>

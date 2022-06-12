@@ -67,7 +67,7 @@
 												$cmp_id = mysqli_fetch_assoc($q);
 												$cmp_id = (int)$cmp_id['id_company'];
 
-												$select = "SELECT customer.id_customer,customer.customer_first_name,customer.customer_second_name,customer.customer_phone,customer.id_booking,customer.id_vehicle,vehicle.vehicle_owner_number,vehicle.vehicle_brand FROM customer JOIN vehicle ON customer.id_vehicle = vehicle.id_vehicle WHERE customer.company_id = $cmp_id";
+												$select = "SELECT customer.id_customer,customer.customer_first_name,customer.customer_second_name,customer.customer_phone,customer.id_booking,customer.id_vehicle,vehicle.vehicle_owner_number,vehicle.vehicle_brand,vehicle.status FROM customer JOIN vehicle ON customer.id_vehicle = vehicle.id_vehicle WHERE customer.company_id = $cmp_id";
 
 												$result = mysqli_query($conn,$select);
 
@@ -81,7 +81,7 @@
 														<th><input type="text" class="form-control" placeholder=" Vehicle type" disabled></th>
 														<th><input type="text" class="form-control" placeholder=" Plate No." disabled></th>
 														<th><input type="text" class="form-control" placeholder=" Phone" disabled></th>
-														<th><input type="text" class="form-control" placeholder=" Date" disabled></th>
+														<th><input type="text" class="form-control" placeholder=" Status" disabled></th>
 														<th class="td-actions text-center" style="color: black;">Action</th>
 													</tr>
 												</thead>
@@ -90,14 +90,24 @@
 													$sn=1;
 													while($user=mysqli_fetch_assoc($result)){
 													?>
-													<tr id="tbr">
+													<tr id="<?php echo$user['id_vehicle'];?>">
 														<td scope="row" id="tfont"><?php echo $sn++?></td>
 														<td id="tfont"><?php echo $user['customer_first_name']." ".$user['customer_second_name'];?></td>
 														<td id="tfont"><?php echo $user['vehicle_brand'];?></td>
 														<td id="tfont"><?php echo $user['vehicle_owner_number'];?></td>
 														<td id="tfont"><?php echo $user['customer_phone'];?></td>
-														<td id="tfont"><?php echo $user['id_booking'];?></td>
-                                                        <td id="tfont" class="td-actions text-center"><a href="customer_1_edit.php?update=<?php echo$user['id_customer'];?>"><i class="la la-edit" title="Edit"></i></a> <a href="customer_1_delete.php?delete=<?php echo$user['id_vehicle'];?>"><i class="la la-times text-danger" title="Remove"></i</a></td>
+														<?php if($user['status']==1){ ?>
+															<td id="tfont" style="text-align:center;"><a href="process_state.php?id=<?php echo $user['id_vehicle'];?>" class="btn btn-danger btn-sm" role="button" style="padding: 2px 6px 2px 6px  !important;font-size: 16px;">On Process</a></td>
+															<?php
+														}else{
+															?>
+															<td id="tfont" style="text-align:center;"><a class="btn btn-success btn-sm " role="button" style="padding: 2px 6px 2px 6px  !important;font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Done&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
+
+															<?php
+														}
+														
+														?>
+                                                        <td id="tfont" class="td-actions text-center"><a href="customer_1_edit.php?update=<?php echo$user['id_customer'];?>"><i class="la la-edit" title="Edit"></i></a> <a href="#"><i class="la la-times text-danger remove" title="Remove"></i</a></td>
 													</tr>
 													
 													<?php
@@ -120,6 +130,75 @@
 				</div>
 			</div>
 			<!-- end of pannel or container -->
+			<script type="text/javascript">
+				function reset () {
+					$("#toggleCSS").attr("href", "../../design/lib/themes/alertify.default.css");
+					alertify.set({
+						labels : {
+							ok     : "OK",
+							cancel : "Cancel"
+						},
+						delay : 5000,
+						buttonReverse : false,
+						buttonFocus   : "ok"
+					});
+				}
+				$(".remove").click(function(){
+					var id = $(this).parents("tr").attr("id");
+					// if(alertify.confirm('Are you sure you want to delete this record permanet?')){
+						alertify.confirm("Are you sure you want to delete this record permanet?", function (e) {
+							if (e) {
+								$.ajax({
+									url: 'customer_1_delete.php',
+									type: 'GET',
+									data: {id : id},
+									error: function() {
+										alertify.alert('something is wrong');
+									},
+									success: function(data){
+										$("#"+id).remove();
+										alertify.alert("Record removed successfully");
+									}
+
+								});
+								location.reload();
+								return false;
+								// alertify.alert("Successful AJAX after OK");
+							} else {
+								alertify.alert("Your Cancel!");
+							}
+					});
+				});
+				
+				$(".remove").click(function(){
+					var id = $(this).parents("tr").attr("id");
+					// if(alertify.confirm('Are you sure you want to delete this record permanet?')){
+						alertify.confirm("Are you sure you want to delete this record permanet?", function (e) {
+							if (e) {
+								$.ajax({
+									url: 'customer_1_delete.php',
+									type: 'GET',
+									data: {id : id},
+									error: function() {
+										alertify.alert('something is wrong');
+									},
+									success: function(data){
+										$("#"+id).remove();
+										alertify.alert("Record removed successfully");
+									}
+
+								});
+								location.reload();
+								return false;
+								// alertify.alert("Successful AJAX after OK");
+							} else {
+								alertify.alert("Your Cancel!");
+							}
+					});
+				});
+
+			</script>
+
 <?php 
 	require "dashfoot.php";
 ?>

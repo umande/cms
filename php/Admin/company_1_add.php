@@ -3,7 +3,7 @@
     require "../sanitization.php";
     // $company=$certificate=$first_name=$second_name=$last_name=$email=$address=$phone=$description=$areaname;
 	require "dashhed.php";
-	$error = new SplFixedArray(10);
+	$error = new SplFixedArray(11);
      if(isset($_POST['update1'])){
 
         $company = mysqli_real_escape_string($conn, dataSanitizations($_POST['company']));
@@ -97,6 +97,9 @@
         if(empty($description)){
             $error[9] = "enter company description";
         }
+        if(empty($areaname)){
+            $error[10] = "chose area name";
+        }
         
 
         $query5 = "SELECT id_area FROM area WHERE district = '$areaname'";
@@ -109,7 +112,7 @@
                 $exart+=1; 
             }
         }
-        if(isset($error) && $exart == 10){
+        if(isset($error) && $exart == 11){
 
             move_uploaded_file($ftemp,'../../design/img/'.$new_name.'.'.$endi);
             $photo = "$new_name.$endi";
@@ -193,7 +196,7 @@
                                 <div class="col-md-12">
 									<div class="card-body col-md-12">
                                         
-									    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" onsubmit="return chk()"  method="post" enctype="multipart/form-data" id="form">
+									    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"  method="post" enctype="multipart/form-data" id="form">
                                             <!--  -->
                                             <div class="row">
                                                 <!--  -->
@@ -215,17 +218,28 @@
                                             </div>
                                             <div class="form-group">
 												<label for="solidSelect">Area</label>
-												<select class="form-control input-solid" name="areaname" id="area" >
+												<select class="form-control input-solid" name="areaname" id="area" > 
                                             <?php 
-                                                $query4 = "SELECT * FROM area";
-                                                $query4 = mysqli_query($conn,$query4);
-                                                while($area = mysqli_fetch_assoc($query4)){
+                                                if(!empty($areaname)){
+                                                    ?>
+                                                    <option <?php $areaname;?>><?php echo $areaname;?></option>
+                                                    <?php
+                                                }
+                                                else{
+                                                    ?>
+                                                    <option value="">--Choose Area--</option>
+                                                    <?php
+                                                    $query4 = "SELECT * FROM area";
+                                                    $query4 = mysqli_query($conn,$query4);
+                                                    while($area = mysqli_fetch_assoc($query4)){
                                                     ?>
                                                         <option <?php $area['district'];?>><?php echo $area['district'];?></option>
                                                 <?php
+                                                }
                                             }  
                                             ?>
                                             </select>
+                                            <div class="err" style="color: red;"><?php if(!empty($error)){echo $error[10]; }?></div>
 											</div>
                                             <div class="form-group">
                                                 <label for="text">First Name</label>
@@ -282,10 +296,10 @@
                                                     <input class="form-radio-input" type="radio" name="optionsRadios" value="female" id="sx">
                                                     <span class="form-radio-sign">Female</span>
                                                 </label>
-                                            </div>
-                                            <div class="card-action">
-                                                <input type="submit" class="btn btn-success mt-3 form-control" name="update1" id="submit" value="Submit">
-                                                
+                                                <div class="card-action">
+                                                    <button class="btn btn-success mt-3 form-control" name="update1">Submit</button>
+                                                    <!-- <input type="submit" class="btn btn-success mt-3 form-control" name="update1" id="submit" value="Submit"> -->
+                                                </div>
                                             </div>
                                             </div>
                                                 <!--  -->
