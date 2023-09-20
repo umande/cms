@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% block body %}
+{% include 'header1.html' %}
+{% load static %}
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      <a class="nav-link " href="{% url 'user' %}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'customer-u' %}">
+        <i class="bi bi-people"></i><span>Customer</span><i></i>
+      </a>
+    </li><!-- End customer Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'request_user-u' %}">
+        <i class="bi bi-cart4"></i><span>Request</span><i></i>
+      </a>
+    </li><!-- End request Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'employee-u' %}">
+        <i class="bi bi-people"></i><span>Employee</span><i></i>
+      </a>
+    </li><!-- End employee Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#report-nav" data-bs-toggle="collapse" href="#">
+        <i class="bx bx-bar-chart"></i><span>Report</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="{% url 'report-u' 1 %}">
+            <i class="bi bi-circle"></i><span>Today</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'report-u' 2 %}">
+            <i class="bi bi-circle"></i><span>Month</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'report-u' 3 %}">
+            <i class="bi bi-circle"></i><span>year</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End report Nav -->
+
+
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Profile</h1>
+      <nav>
+        <ol class="breadcrumb" style="font-size: 16px !important;">
+          <li class="breadcrumb-item"><a href="{% url 'user' %}"><i class="bi bi-house-door" style="color: red !important;"></i></a></li>
+          <li class="breadcrumb-item active">Profile</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+      <div class="row">
+        <div class="col-xl-4">
+
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+              <img src="{% static 'assets/img/icon.png' %}" alt="Profile" class="rounded-circle">
+              <h2>{{Fname | title}} {{Sname | title}}</h2>
+              <h3 class="text-primary">admin</h3>
+              {% comment %} <div class="social-links mt-2">
+                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+              </div> {% endcomment %}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-xl-8">
+          {% if messages %}
+              {% for message in messages %}
+              {% if message.tags == 'warning'%}
+              <script>
+                const Toast = Swal.mixin({
+                  toast: true,
+                  position: 'top-end',
+                  showConfirmButton: false,
+                  timer: 4000,
+                  timerProgressBar: true,
+                  didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                  }
+                })
+                
+                Toast.fire({
+                  icon: 'error',
+                  title: 'you are enter wrong current password'
+                })
+                
+              </script>
+              {% endif%}
+
+              {% if message.tags == 'success'%}
+              <script>
+                const Toast = Swal.mixin({
+                  toast: true,
+                  position: 'top-end',
+                  showConfirmButton: false,
+                  timer: 4000,
+                  timerProgressBar: true,
+                  didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                  }
+                })
+                
+                Toast.fire({
+                  icon: 'success',
+                  title: 'Password change succesifull'
+                })
+                
+              </script>
+              {% endif%}
+              {% endfor %}
+          {% endif %}
+          <div class="card">
+            <div class="card-body pt-3">
+              <!-- Bordered Tabs -->
+              <ul class="nav nav-tabs nav-tabs-bordered">
+
+                <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#change-password">Change Password</button>
+                </li>
+
+              </ul>
+              <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active profile-edit pt-3" id="profile-edit">
+
+                  <!-- Profile Edit Form -->
+                  <form class="row g-3 needs-validation" action="" method="POST" novalidate>
+                  {% csrf_token %}
+                  <div class="row mb-3">
+                    <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Company Image</label>
+                    <div class="col-md-8 col-lg-9">
+                      <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <img src="{% static 'assets/img/icon.png' %}" alt="Profile">
+                        <div class="pt-2">
+                          <input type="file" name="image2" id = "image2" accept=".jpg, .jpeg, .png" hidden>
+                          <a href="#" onclick="upload();" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
+                          <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+
+                  {% for field in form1 %}
+                  <div class="row mb-3">
+                  <label class="col-md-4 col-lg-3 col-form-label">{{field.label}}</label>
+                  <div class="col-md-8 col-lg-9">
+                    {{ field }}
+                    <div class="valid-feedback">
+                    Looks good!
+                    </div>
+                  </div>
+                  </div>
+                  {% endfor %}
+                  {% for field in form2 %}
+                  <div class="row mb-3">
+                    <label class="col-md-4 col-lg-3 col-form-label">{{field.label}}</label>
+                    <div class="col-md-8 col-lg-9">
+                      {{ field }}
+                      <div class="valid-feedback">
+                      Looks good!
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                   
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                  </form><!-- End Profile Edit Form -->
+
+                </div>
+
+                <div class="tab-pane fade pt-3" id="change-password">
+                  <!-- Change Password Form -->
+                  {% comment %} <form class="needs-validation" novalidate onsubmit="validat_psw()" method="POST" action="{% url 'user_Profile_passwordChange' %}"> {% endcomment %}
+                  <form class="needs-validation" onsubmit="return validat_psw()" novalidate method="POST" action="{% url 'user_Profile_passwordChange' %}" >
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                      <label for="yourPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input type="password" name="current_password" class="form-control" id="currentPassword" required>
+                        <div class="invalid-feedback">Please enter your current password!</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="yourPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input type="password" name="new_passwword" class="form-control" id="newPassword" required>
+                        <div class="invalid-feedback">Please enter your new password!</div>
+                        <span class="error_m0 text-danger" id="error_m"></span>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="yourPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input type="password" name="confirm_passwword" class="form-control" id="confirmPassword" required>
+                        <div class="invalid-feedback">Please enter your re-enter new password!</div>
+                        <span class="error_m0 text-danger" id="error_m1"></span>
+                      </div>
+                    </div>
+
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary">Change Password</button>
+                    </div>
+                  </form><!-- End Change Password Form -->
+
+                </div>
+
+              </div><!-- End Bordered Tabs -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+  <script>
+    function upload(){
+      $('#image2').click();  
+    }
+  </script>
+  {% endblock body %}

@@ -1,0 +1,43 @@
+{% extends 'base1.html' %}
+{% block body1 %}
+{% load static %}
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('{% static "assets/webasset/img/carousel-3.jpg" %}');">
+			<div class="wrap-login100" style="box-shadow: 0 5px 10px rgb(255, 255, 255)  !important;">
+				<form class="login100-form validate-form" method="POST" action="">
+					<p class="login100-form-title p-b-10 p-t-15">online carwash request</p>
+					{% csrf_token %}
+					<span class="login100-form-logo">
+						<img src="{% static 'assets/webasset/img/avatuser.png' %}" class="login100-form-logo">
+					</span>
+
+					<span class="login100-form-title p-b-34 p-t-27">Sign-In</span>
+					
+					<div class="wrap-input100 validate-input" data-validate = "Enter Your email">
+						<input class="input100" type="text" value="" name="username" placeholder="Username">
+						<span class="focus-input100" data-placeholder="&#xf207;"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Enter password">
+						<input class="input100" type="password" value="" name="password" placeholder="Password">
+						<span class="focus-input100" data-placeholder="&#xf191;"></span>
+					</div>
+
+          			<label style="color: white !important;text-align:center;" class="mb-3"></label>
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" name="login">Login</button>
+					</div>
+ 
+					<div class="text-center p-t-50">
+						<!-- <a class="txt1" href="#">Forgot Password?</a> -->
+						<a href="{% url 'register-w' %}" class="txt1" style="color: #fff;text-decoration:none;">&mdash; Or Create Account &mdash;</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="dropDownSelect1"></div>
+
+{% endblock body1%}

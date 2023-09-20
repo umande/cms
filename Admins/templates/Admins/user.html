@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% block body %}
+{% include 'header.html' %}
+{% load static %}
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'Admins' %}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'users' %}">
+        <i class="ri-car-line"></i><span>Carwash</span><i></i>
+      </a>
+    </li><!-- End user Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'customer' %}">
+        <i class="bi bi-people"></i><span>Customer</span><i></i>
+      </a>
+    </li><!-- End customer Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'request_user' %}">
+        <i class="bi bi-cart4"></i><span>Request</span><i></i>
+      </a>
+    </li><!-- End request Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'employee' %}">
+        <i class="bi bi-people"></i><span>Employee</span><i></i>
+      </a>
+    </li><!-- End employee Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#report-nav" data-bs-toggle="collapse" href="#">
+        <i class="bx bx-bar-chart"></i><span>Report</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>Today</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>Month</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>year</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>Manual</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End report Nav -->
+
+
+</aside><!-- End Sidebar-->
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Carwash</h1>
+      <nav>
+        <ol class="breadcrumb" style="font-size: 16px !important;">
+          <li class="breadcrumb-item"><a href="{% url 'Admins' %}"><i class="bi bi-house-door" style="color: red !important;"></i></a></li>
+          <li class="breadcrumb-item active">Carwash</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section dashboard">
+        <div class="row">
+  
+        <!-- Left side columns -->
+        <div class="col-lg-12">
+        <div class="row">
+            <!-- Recent Sales -->
+            <div class="col-12">
+            <div class="card recent-sales">
+
+                <div class="card-body">
+                <h5 class="card-title">List of Driver</h5>
+               <div class="table-responsive">
+                  {% comment %} <table class="table table-borderless datatable"> {% endcomment %}
+                  <table class="table table-hover table-border datatable">
+                    <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Company Name</th>
+                        <th scope="col">Place</th>
+                        <th scope="col">Owner</th>
+                        <th scope="col">Employee</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                    {% if user.role != "Admin" %}
+                    <tr id="{{user.id_owner}}">
+                    <th scope="row"><a href="#">#24{{user.id_owner}}</a></th>
+                        <td>{{user.company.company_name|title}} Carwash</td>
+                        <td>{{user.company.area}}</td>
+                        <td>{{user.owner_first_name | title}} {{user.owner_second_name | title}}</td>
+                        <td>
+                          {% for nUMBER in N_of_worker %}
+                          {% if user.id_owner == nUMBER.owner_id%}
+                          {{nUMBER.count}}
+                          {% endif %}
+                          {% endfor %}
+                        </td>
+                        <td>
+                          {% if user.status != '1' %}
+                          <a href="#" onclick="activatcompany('{{user.id_owner}}','{{user.status}}','{{user.company.company_name}}')" class="btn btn-link text-success">active</a>
+                          {% else %}
+                          <a href="#" onclick="activatcompany('{{user.id_owner}}','{{user.status}}','{{user.company.company_name}}')" class="btn btn-link text-primary">inactive</a>
+                          {% endif %}
+                        </td>
+                        <td>
+                        <a  href="{% url 'editCarwash' user.company.id %}" class="badge bg-primary" style="font-size:16px; margin-right: 3px;" onMouseOver="this.style.color='red'" onMouseOut="this.style.color='white'"><i class="bi bi-pen"> </i> </a>
+                        <a href="#" onclick = "delcompany('{{user.id_owner}}','{{user.owner_first_name}}','{{user.owner_second_name}}','{{user.company.company_name}}')" class="badge bg-danger" style="font-size:16px;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='white'"><i class="bi bi-exclamation-octagon"></i></a>
+                        </td>
+
+                        <!-- delete Modal -->
+                            <div class="modal fade" id="verticalycentered" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                <div class="modal-header" style="background-color: #dee2e6;">
+                                    <h5 class="modal-title" style="color: red;">Warning!</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{% url 'delCarwash' %}" method="POST">
+                                    <div class="modal-body">
+                                    {% csrf_token %}
+                                    <h6>Are sure you want to delete '<span id="cName" style="color: maroon;"></span>?'</h6>
+                                    <h6>Who own company '<span id="cName" style="color: maroon;"></span>?'</h6>
+                                    <input type="text" name="idD" id="idD" style="display: none;">
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                    </div>
+                                </form>
+                                </div>
+
+                            </div>
+                            </div><!-- End delete Modal-->
+                        <!-- activate Modal -->
+                            <div class="modal fade" id="ActivateModal" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                <div class="modal-header" style="background-color: #dee2e6;">
+                                    <h5 class="modal-title" style="color: red;">Warning!</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                {% comment %} <form action="" method="POST"> {% endcomment %}
+                                <form action="{% url 'actCarwash' %}" method="POST">
+                                    <div class="modal-body">
+                                    {% csrf_token %}
+                                    <h6 id="msg1">?'</h6>
+                                    <h4 id="companyName" style="color: blue;"></h4>
+                                    <h6 id="msg2"></h6>
+                                    <input type="text" name="activatId" id="activatId" style="display: none;">
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                    </div>
+                                </form>
+                                </div>
+
+                            </div>
+                            </div><!-- End activat Modal-->
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+               </div>
+                <div class="d-flex align-items-end justify-content-end">
+                  <a class="btn btn-success" href="{% url 'addCarwash' %}">add</a>
+                </div>
+              </div>
+            </div>
+            </div><!-- End Recent Sales -->
+
+        </div>
+        </div><!-- End Left side columns -->
+    </div>
+    </section>
+
+</main><!-- End #main -->
+
+{% endblock body %}

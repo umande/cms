@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load crispy_forms_tags %}
+{% include 'header1.html' %}
+{% load static %}
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'user' %}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'customer-u' %}">
+        <i class="bi bi-people"></i><span>Customer</span><i></i>
+      </a>
+    </li><!-- End customer Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'request_user-u' %}">
+        <i class="bi bi-cart4"></i><span>Request</span><i></i>
+      </a>
+    </li><!-- End request Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'employee-u' %}">
+        <i class="bi bi-people"></i><span>Employee</span><i></i>
+      </a>
+    </li><!-- End employee Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#report-nav" data-bs-toggle="collapse" href="#">
+        <i class="bx bx-bar-chart"></i><span>Report</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="{% url 'report-u' 1 %}">
+            <i class="bi bi-circle"></i><span>Today</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'report-u' 2 %}">
+            <i class="bi bi-circle"></i><span>Month</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'report-u' 3 %}">
+            <i class="bi bi-circle"></i><span>year</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End report Nav -->
+
+
+</aside><!-- End Sidebar-->
+<main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Customer</h1>
+      <nav>
+        <ol class="breadcrumb" style="font-size: 16px !important;">
+          <li class="breadcrumb-item"><a href="{% url 'user' %}"><i class="bi bi-house-door" style="color: red !important;"></i></a></li>
+          <li class="breadcrumb-item "><a href="{% url 'customer-u' %}">customer</a></li>
+          <li class="breadcrumb-item active">Add customer</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+     <!-- Left side columns -->
+     <div class="col-lg-12">
+        <div class="row">
+          <div class="col-lg-12">
+
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Add customer</h5>
+                  <!-- Custom Styled Validation -->
+                  <form class="row g-3 needs-validation" action="" method="POST" novalidate>
+                    {% if form2.errors %}
+                  <div class="alert alert-danger" role="alert">
+                    {% for label,errors in form2.errors.items %}
+                    {% for error in errors %}
+                    <b>{{ label }}</b>:{{ error }}
+                    {% endfor %}
+                    {% endfor %}
+                  </div>
+                  {% endif %}
+                   {% csrf_token %}
+                   <div class="row">
+                        {% for field in form2 %}
+                        <div class="col-md-4">
+                            <label class="form-label">{{field.label}}</label>
+                            {{ field }}
+                            <div class="valid-feedback">
+                            Looks good!
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% for field in form1 %}
+                        <div class="col-md-4">
+                            <label class="form-label">{{field.label}}</label>
+                            {{ field }}
+                            <div class="valid-feedback">
+                            Looks good!
+                            </div>
+                        </div>
+                        {% endfor %}
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-primary" type="submit">Submit form</button>
+                        </div> 
+                    </div><!-- End Bordered Tabs -->                      
+                  </form><!-- End Custom Styled Validation -->
+    
+                </div>
+              </div>
+    
+            </div>
+
+        </div>
+      </div><!-- End Left side columns -->
+
+{% endblock body %}

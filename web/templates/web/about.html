@@ -1,0 +1,130 @@
+{% extends 'base2.html' %}
+{% block body1 %}
+{% load static %}
+         <!-- Nav Bar Start -->
+         <div class="nav-bar">
+            <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+                    <div class="container-fluid">
+                        <a href="#" class="navbar-brand">MENU</a>
+                            <a href="{% url 'home-w'%}">
+                                    <h2 style="color: aliceblue;">Car <span>wash</span></h2>
+                            </a>
+                        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toghle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                            <div class="navbar-nav mr-auto">
+                                <a href="{% url 'home-w'%}" class="nav-item nav-link">Home</a>
+                                <a href="{% url 'washing-w'%}" class="nav-item nav-link">Service point</a>
+                                <a href="{% url 'about-w'%}" class="nav-item nav-link active">About</a>
+                                <a href="{% url 'contact-w'%}" class="nav-item nav-link">Contact</a>
+                        </div>
+                        <a href="logout.php" class="nav-item nav-link" style="float: right;">Logout</a>
+                    </div>
+                </nav>
+        </div>
+        <!-- Nav Bar End -->
+       
+        <!-- Team Start -->
+        <div class="team">
+            <div class="container">
+                <div class="section-header text-center">
+                    <h2>About us</h2>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-md-7">
+                        <div class="team-item">
+                            <div class="team-img">
+                                <img src="{% static 'assets/img/profile.jpg' %}" alt="Team Image" style="height: 200px;">
+                            </div>
+                            <div class="team-text">
+                                <h2>Habibu J Muhangwa</h2>
+                                <p>student of arusha technical college</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8 col-md-10">
+                        <div class="team-item pt-4 mt-4">
+                            online carwash management system is a system that aims to connect the customer with the owner of the carwash in order to improve or reduce the time spent looking 
+                            for a carwash that is right for you and can be serviced even without arriving In the relevant part, what you need is to request for the car to be serviced and the car to be washed
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Team End -->
+
+        <!-- Facts Start -->
+        <div class="facts" data-parallax="scroll" data-image-src="{% static 'assets/webasset/img/facts.jpg' %}">
+            <div class="container">
+                <div class="row justify-content-cener">
+                    <div class="col-lg-4 col-md-8">
+                        <div class="facts-item">
+                            <i class="fa fa-map-marker-alt"></i>
+                            <div class="facts-text">
+                                <h3 data-toggle="counter-up">{{numberCompany}}</h3>
+                                <p>Service Points</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-8">
+                        <div class="facts-item">
+                            <i class="fa fa-user"></i>
+                            <div class="facts-text">
+                                <h3 data-toggle="counter-up">{{numberWorker}}</h3>
+                                <p>Workers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-8">
+                        <div class="facts-item">
+                            <i class="fa fa-users"></i>
+                            <div class="facts-text">
+                                <h3 data-toggle="counter-up">0</h3>
+                                <p>Happy Clients</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Facts End -->
+
+
+      <!-- Footer Start -->
+      <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-7">
+                    <div class="footer-contact">
+                        <h2>Get In Touch</h2>
+                        <p><i class="fa fa-map-marker-alt"></i>Miti-mirefu, Mwanza, TANZANIA</p>
+                        <p><i class="fa fa-phone-alt"></i>0752932680</p>
+                        <p><i class="fa fa-envelope"></i>Habibujumanne80@gmail.com</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-7">
+                    <div class="footer-link">
+                        <h2>Popular Links</h2>
+                        <a href="{% url 'about-w'%}">About Us</a>
+                        <a href="{% url 'contact-w'%}">Contact Us</a>
+                        <a href="{% url 'washing-w'%}">Service Points</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container copyright">
+            <p>&copy; <span id="currentdat"></span>,U-wash By <a href="#">Habibu Jumanne</a></p>
+        </div>
+    </div>
+    <!-- Footer End -->
+    <script>
+    var d = new Date();
+    document.getElementById("currentdat").innerHTML = d.getFullYear();
+    </script>    
+        <!-- Back to top button -->
+        <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+{% endblock body1%}

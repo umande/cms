@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>U-wash</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/ci.png' %}" rel="icon">
+  <link href="{% static 'assets/img/ci.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  {% comment %} <link href="https://fonts.gstatic.com" rel="preconnect"> {% endcomment %}
+  {% comment %} <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet"> {% endcomment %}
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  
+  <!-- Template Main CSS File -->
+  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+  <script src="{% static 'assets/js/sweetalert2.all.min.js' %}"></script>
+  <link href="{% static 'assets/css/sweetalert2.min.css' %}" rel="stylesheet">
+  {% comment %} map {% endcomment %}
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7nkdhgPZsOlAC4b3IWDAvTm3TSIaef7w&callback=initMap"    type="text/javascript"></script>
+  <script src="{% static 'assets/webasset/js/jquery-3.4.1.min.js' %}"></script>    
+  <script src="{% static 'assets/webasset/js/alertify.min.js' %}"></script>
+  <style>
+    #div_id_password1 ul{
+      display: none !important;
+    }
+  </style>
+</head>
+
+
+{% block body %}
+
+
+
+{% endblock body%}
+
+
+{% load static %}
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="{% static 'assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
+<script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/vendor/tinymce/tinymce.min.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script>
+<script src="{% static 'assets/js/jquery-1.9.1.js' %}"></script>
+<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+<script>
+    function activatcompany(ownerId,status,cName){
+      $("#activatId").val(ownerId)
+      var msg = 'Are you sure you whant to activate "'+cName+' Carwash"';
+      var msg2 = 'When you deactivate "'+cName+' Carwash"';
+      var msg3 = "it's no longer perform any service ";
+      if(status == 1){
+        $("#msg1").text(msg)
+      }
+      if(status == 2){
+        $("#msg1").text(msg2)
+        $("#msg2").text(msg3)
+      }
+      $("#ActivateModal").modal("show")
+      status = 0
+    }
+    
+    function delcompany(companyId,fName,sName,cName){
+        $("#idD").val(companyId)
+        var name = fName +' '+sName;
+        var carwsh = cName +' Carwash';
+        $("#uName").text(name)
+        $("#cName").text(carwsh)
+        $("#verticalycentered").modal("show")
+        
+    }
+
+    function delcustomer(customerId,fName,sName){
+        $("#idD").val(customerId)
+        var name = fName +' '+sName;
+        $("#cName").text(name)
+        $("#verticalycentered").modal("show")
+        
+    }
+    function assignTask(customerId){
+        $("#id_employee").val(customerId)
+        $("#assignTask").modal("show")
+        
+    }
+    function validat_psw(){
+      const currentPassword = $('#currentPassword').val()
+      const newPassword = $('#newPassword').val()
+      const confirmPassword = $('#confirmPassword').val()
+      var Np = $('#newPassword');
+      var Cp = $('#confirmPassword');
+      var reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+      if(currentPassword.trim()=='' || newPassword.trim()=='' || confirmPassword.trim()==''){
+        $(".error_m0").text('')
+        $("#error_m1").text('')
+        return false
+      }
+      else{
+        if(newPassword.match(reg)){ 
+          
+        }else{
+          $(".form-control.is-valid, .was-validated .form-control:valid").css({"background-image" : "none"})
+          $("#error_m").text("password must contain 8 character uppercase and small case and special symbol");
+          Np.css({"outline":"none","border-color": "red","box-shadow":"0 0 10px red"})
+          return false;
+        }
+        if(newPassword != confirmPassword){
+          $(".form-control.is-valid, .was-validated .form-control:valid").css({"background-image" : "none"})
+          $("#error_m").text('')
+          $("#error_m1").text('password does not match')
+          Np.css({"border-color": "green","box-shadow":"0 0 10px green"})
+          Cp.css({"outline":"none","border-color": "red","box-shadow":"0 0 10px red"})
+          
+          return false;
+        }
+      }
+      
+    }
+</script>
+</body>
+
+</html>

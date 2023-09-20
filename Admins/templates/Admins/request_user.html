@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block body %}
+{% include 'header.html' %}
+{% load static %}
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'Admins' %}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'users' %}">
+        <i class="ri-car-line"></i><span>Carwash</span><i></i>
+      </a>
+    </li><!-- End user Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'customer' %}">
+        <i class="bi bi-people"></i><span>Customer</span><i></i>
+      </a>
+    </li><!-- End customer Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'request_user' %}">
+        <i class="bi bi-cart4"></i><span>Request</span><i></i>
+      </a>
+    </li><!-- End request Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'employee' %}">
+        <i class="bi bi-people"></i><span>Employee</span><i></i>
+      </a>
+    </li><!-- End employee Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#report-nav" data-bs-toggle="collapse" href="#">
+        <i class="bx bx-bar-chart"></i><span>Report</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>Today</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>Month</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>year</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>Manual</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End report Nav -->
+
+
+</aside><!-- End Sidebar-->
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Request</h1>
+      <nav>
+        <ol class="breadcrumb" style="font-size: 16px !important;">
+          <li class="breadcrumb-item"><a href="{% url 'Admins' %}"><i class="bi bi-house-door" style="color: red !important;"></i></a></li>
+          <li class="breadcrumb-item active">Request</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+
+{% endblock body %}

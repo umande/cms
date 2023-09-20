@@ -1,0 +1,241 @@
+{% extends 'base2.html' %}
+{% block body1 %}
+{% load static %}
+    <body>
+
+        <!-- Nav Bar Start -->
+        <div class="nav-bar">
+            <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+                    <div class="container-fluid">
+                        <!-- <a href="#" class="navbar-brand"></a> -->
+                        <a href="#" class="navbar-brand">MENU</a>
+                            <a href="{% url 'home-w'%}">
+                                    <h2 style="color: aliceblue;">Car <span>wash</span></h2>
+                            </a>
+                        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toghle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                            <div class="navbar-nav mr-auto">
+                                <a href="{% url 'home-w'%}" class="nav-item nav-link active">Home</a>
+                                <a href="{% url 'washing-w'%}" class="nav-item nav-link">Service point</a>
+                                <a href="{% url 'about-w'%}" class="nav-item nav-link">About</a>
+                                <a href="{% url 'contact-w'%}" class="nav-item nav-link">Contact</a>
+                            </div>
+                            <a href="logout.php" class="nav-item nav-link" style="float: right;">Logout</a>
+                        </div>
+                    </div>
+                </nav>
+        </div>
+        <!-- Nav Bar End -->
+
+        <!-- Carousel Start -->
+        <div class="carousel">
+                <div class="owl-carousel">
+                    <div class="carousel-item">
+                        <div class="carousel-img">
+                            <img class="d-block w-100" src="{% static 'assets/webasset/img/carousel-1.jpg' %}" alt="Image">
+                        </div>
+                        <div class="carousel-text">
+                            <h3>Washing & Detailing</h3>
+                            <h1>Keep your Car Newer</h1>
+                            <p>
+                            From inside to outside, we specialize in washing and car detailing carried out entirely by hand, ensuring the best possible results for your car’s unique needs, and a truly next-level shine every time
+                            </p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-img">
+                            <img src="{% static 'assets/webasset/img/carousel-2.jpg' %}" alt="Image">
+                        </div>
+                        <div class="carousel-text">
+                            <h3>Washing & Detailing</h3>
+                            <h1>Quality service for you</h1>
+                            <p>
+                                Our meticulous attention to detail and time-tested skills will have your car looking better than the day you bought it in less than a day
+                            </p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-img">
+                            <img src="{% static 'assets/webasset/img/carousel-3.jpg' %}" alt="Image">
+                        </div>
+                        <div class="carousel-text">
+                            <h3>Washing & Detailing</h3>
+                            <h1>Exterior & Interior Washing</h1>
+                            <p>
+                            Thoroughly wash the arms of your car from top to bottom, including the wheels and tires, and deep clean of all leather, intensive vacuuming (including thorough removal of sand, pet hair, and other detritus)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <!-- Carousel End -->
+
+        <!-- Blog Start -->
+        <div class="blog">
+            <div class="container-fluid">
+                <div class="section-header text-center">
+                    <h2>List of Car Wash</h2>
+                </div>
+                <div class="row">
+                   {% for compData in companyDat%}
+                    <div class="col-lg-4">
+                        <div class="blog-item">
+                            <div class="blog-img">
+                                <img src="{% static 'assets/webasset/img/carousel-3.jpg' %}" alt="Image">
+                            </div>
+                            <div class="blog-text">
+                                <h3>{{compData.company__company_name| title}} Carwash</h3>
+                                <p>
+                                   {{compData.company__company_description}}
+                                </p>
+                            </div>
+                            <div class="blog-meta">
+                                <p><i class="fa fa-user"></i>{{compData.owner_first_name}}</p>
+                                <p onclick="wsh()"><i class="fa fa-map-marker"></i>{{compData.company__area_id__distric}}</p>
+                                </div>
+                                <script>
+                                    function wsh(){
+                                        window.location.href = "{% url 'washing-w'%}";
+                                    }
+                                </script>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+        <!-- Blog End -->
+
+        <!-- Service Start -->
+        <a id="wdd"></a>
+        <div class="service">
+            <div class="container">
+                <div class="section-header text-center">
+                    <h2>Washing Services</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="service-item">
+                            <i class="flaticon-car-wash-1"></i>
+                            <h3>Exterior Washing</h3>
+                            <p>Thorough hand wash of your car from top to bottom, including wheels and tires</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="service-item">
+                            <i class="flaticon-car-wash"></i>
+                            <h3>Interior Washing</h3>
+                            <p>This interior detailing package includes a deep clean of all leather, intensive vacuuming, and a full clean of your window interiors and door jambs.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="service-item">
+                            <i class="flaticon-vacuum-cleaner"></i>
+                            <h3>Vacuum Cleaning</h3>
+                            <p>vacuum cleaners are self-service stationary devices, activated by a coin or token, single- or two-station, used to clean the interior of vehicles.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="service-item">
+                            <i class="flaticon-seat"></i>
+                            <h3>Seats Washing</h3>
+                            <p>wipe your seats down with Weiman Leather Cleaning Wipes.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="service-item">
+                            <i class="flaticon-car-service"></i>
+                            <h3>Window Wiping</h3>
+                            <p>Is a device used to remove rain, snow, ice, washer fluid, water, or debris from a vehicle's front window?</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="service-item">
+                            <i class="flaticon-car-wash"></i>
+                            <h3>Oil Changing</h3>
+                            <p>Get the grime out of your engine and off your car’s finish with the Classic Clean Up.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Service End -->
+                
+        <!-- Facts Start -->
+        <div class="facts" data-parallax="scroll" data-image-src="{% static 'assets/webasset/img/facts.jpg' %}">
+            <div class="container">
+                <div class="row justify-content-cener">
+                    <div class="col-lg-4 col-md-8">
+                        <div class="facts-item">
+                            <i class="fa fa-map-marker-alt"></i>
+                            <div class="facts-text">
+                                <h3 data-toggle="counter-up">{{numberCompany}}</h3>
+                                <p>Service Points</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-8">
+                        <div class="facts-item">
+                            <i class="fa fa-user"></i>
+                            <div class="facts-text">
+                                <h3 data-toggle="counter-up">{{numberWorker}}</h3>
+                                <p>Workers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-8">
+                        <div class="facts-item">
+                            <i class="fa fa-users"></i>
+                            <div class="facts-text">
+                                <h3 data-toggle="counter-up">0</h3>
+                                <p>Happy Clients</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Facts End -->
+
+      
+
+        <!-- Footer Start -->
+       <div class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7">
+                        <div class="footer-contact">
+                            <h2>Get In Touch</h2>
+                            <p><i class="fa fa-map-marker-alt"></i>Miti-mirefu, Mwanza, TANZANIA</p>
+                            <p><i class="fa fa-phone-alt"></i>0752932680</p>
+                            <p><i class="fa fa-envelope"></i>Habibujumanne80@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-7">
+                        <div class="footer-link">
+                            <h2>Popular Links</h2>
+                            <a href="{% url 'about-w'%}">About Us</a>
+                            <a href="{% url 'contact-w'%}">Contact Us</a>
+                            <a href="{% url 'washing-w'%}">Service Points</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container copyright">
+                <p>&copy; <span id="currentdat"></span>,U-wash By <a href="#">Habibu Jumanne</a></p>
+            </div>
+        </div>
+        <!-- Footer End -->
+        <script>
+        var d = new Date();
+        document.getElementById("currentdat").innerHTML = d.getFullYear();
+        </script>
+        <!-- Back to top button -->
+        <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+{% endblock body1%}
+       

@@ -1,0 +1,566 @@
+{% extends 'base2.html' %}
+{% block body1 %}
+{% load static %}
+    <script>
+        var icon = new google.maps.MarkerImage("http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        new google.maps.Size(50, 50), new google.maps.Point(0, 0),
+        new google.maps.Point(16, 32));
+
+        // console.log(navigator.geolocation);
+        const center = [-3.368277, 36.680892];
+        var map = null;
+        var currentPopup;
+        var bounds = new google.maps.LatLngBounds();
+        // addMarker
+        function addMarker(lat, lng, info) {
+                var pt = new google.maps.LatLng(lat, lng, info);
+                bounds.extend(pt);
+                var marker = new google.maps.Marker({
+                    position: pt,
+                    // label: "A",
+                    icon: icon,
+                    map: map,
+                });
+                var popup = new google.maps.InfoWindow({
+                    content: info,
+                    maxWidth: 300
+                });
+
+        google.maps.event.addListener(popup, "closeclick", function() {
+                map.setZoom(14);
+                map.panTo(center);
+                currentPopup = null;
+        });
+
+
+        //map zoom
+        google.maps.event.addListener(marker, "click", function() {
+            map.setZoom(17);
+            map.setCenter(marker.getPosition());
+			if (currentPopup != null) {
+			currentPopup.close();
+			currentPopup = null;
+			}
+			popup.open(map, marker);
+			currentPopup = popup;
+            var name = popup.content;
+            var en = name.search("</h1>")
+            name = name.slice(22, en);
+            var companyName = document.getElementById("companyName").value = name;
+            ico();
+	});
+
+
+        }
+        window.onload = function(){
+
+            map = new google.maps.Map(document.getElementById("map"), {
+                // center: new google.maps.LatLng(navigator.geolocation.getCurrentPosition(function( position ){var mylatlong = position.coords.latitude + "," + position.coords.longitude;})),
+                center: new google.maps.LatLng(-3.368277, 36.680892),
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false,
+                mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
+                },
+        
+                });
+
+            {% for item in mapData %}
+            console.log(item.company__company_name)
+            console.log('hellow')
+                addMarker('{{item.company__map_id__lat}}', '{{item.company__map_id__lng}}','<h1 id="firstHeading">'+ '{{item.company__company_name}}' +'</h1>' + '<h4 id="secondHeading" class="firstHeading">'+'{{item.company__company_description}}'+'</h4>'+'<a class="btn" data-bs-toggle="modal" data-bs-target="#myModal">request</a>'); 
+            {% endfor %}
+
+        center = bounds.getCenter();
+        map.fitBounds(bounds);
+        }
+
+            
+        var iconSelect;
+
+        function ico(){
+            selectedText = document.getElementById('selected-text');
+            console.log(selectedText);
+            document.getElementById('my-icon-select').addEventListener('changed', function(e){
+               selectedText.value = iconSelect.getSelectedValue();
+            });
+
+            iconSelect = new IconSelect("my-icon-select", 
+                {'selectedIconWidth':76,
+                'selectedIconHeight':43,
+                'selectedBoxPadding':1,
+                'iconsWidth':63,
+                'iconsHeight':58,
+                'boxIconSpace':1,
+                'vectoralIconNumber': 3,
+                'horizontalIconNumber': 3});
+
+            var icons = [];
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/micro.png' %}", 'iconValue':'micro'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/center.png'  %}", 'iconValue':'center'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/sedan.png'  %}", 'iconValue':'sedan'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/suv.png'  %}", 'iconValue':'suv'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/minbus.png'  %}", 'iconValue':'minbus'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/limousine.png'  %}", 'iconValue':'limousine'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/crossover.png'  %}", 'iconValue':'crossover'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/pickup.png'  %}", 'iconValue':'pickup'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/hatchback.png'  %}", 'iconValue':'hatchback'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/universal.png'  %}", 'iconValue':'universal'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/sportcar.png'  %}", 'iconValue':'sportcar'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/supervan.png'  %}", 'iconValue':'supervan'});
+            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/minpickup.png'  %}", 'iconValue':'minpickup'});
+            
+            iconSelect.refresh(icons);
+
+        };
+            
+        </script>
+<style>
+        #map {
+            height: 500px;
+            width: 100%;
+            box-shadow: 0 5px 10px rgba(13, 110, 253, 0.4);
+            border-radius: 3%;
+        }
+        #map:hover{
+            border-color: rgba(13, 110, 253, 0.7);
+            box-shadow: 0px 0px 10px 2px rgba(13, 110, 253, 0.6);
+        }
+        .gm-style .gm-style-iw-d::-webkit-scrollbar-track,
+        .gm-style .gm-style-iw-d::-webkit-scrollbar-track-piece,
+        .gm-style .gm-style-iw-c,
+        .gm-style .gm-style-iw-t::after {
+            background: #455068;
+        }
+        .gm-style .gm-style-iw-c{
+            text-align: center !important;
+            width: 10% !important;
+        }
+        #firstHeading{
+            color: #ff0000 !important;
+            font-size: 22px !important;
+        }        
+        #secondHeading{
+            color: #0dfa41 !important;
+            font-size: 16px !important;
+        }
+        #myModal1{
+            background: #87ceeb !important;
+            border-color: #101050 !important;
+            padding: 1.5em .5em .5em !important;
+            border-radius: 2em !important;
+            text-align: center !important;
+            box-shadow: 0 5px 10px rgba(0, 0, 0,.2) !important;
+        }
+        .form-group textarea{
+            padding-left: 10px !important;
+            background-color: #87ceeb !important;
+            border: none !important;
+            border-radius: 30px 0px 0px 20px !important;
+            border-bottom: 3px  solid black !important;
+            border-bottom: 3px  solid black !important;
+            border-left: 3px  solid black !important;
+            box-shadow: 0 5px 10px rgba(0, 0, 0,.1) !important;
+        }
+        .form-group input[type=text]{
+            padding-left: 25px;
+            background-color: #87ceeb;
+            border: none;
+            border-radius: 0px 0px 0px 20px;
+            font-size: 16px;
+            margin-bottom: 5px;
+            border-bottom: 3px solid black;
+            box-shadow: 0 5px 10px rgba(0, 0, 0,.1);
+        }
+        .form-group input[type=text]:focus{
+            padding-left: 25px;
+            background-color: #87ceeb;
+            font-size: 16px;
+            border-bottom: 3px solid black;
+        }
+        .form-group input[type=text]:-webkit-autofill{
+            padding-left: 25px;
+            background-color: #87ceeb;
+            font-size: 16px;
+            border-bottom: 3px solid black;
+        }
+        .form-group textarea:focus{
+            padding-left: 10px !important;
+            background-color: #87ceeb !important;
+            border: none !important;
+            border-radius: 30px 0px 0px 20px !important;
+            border-bottom: 3px  solid black !important;
+            border-bottom: 3px  solid black !important;
+            border-left: 3px  solid black !important;
+            box-shadow: 0 5px 10px rgba(0, 0, 0,.1) !important;
+        }
+        .form-group input[type=datetime-local]{
+            padding-left: 25px !important;
+            background-color: #87ceeb !important;
+            color: black;
+            border: none !important;
+            border-radius: 0px 0px 0px 20px !important;
+            font-size: 16px !important;
+            margin-bottom: 5px !important;
+            border-bottom: 3px solid black !important;
+            box-shadow: 0 5px 10px rgba(0, 0, 0,.1) !important;
+        }
+        .form-group input[type=datetime-local]:focus{
+            padding-left: 25px !important;
+            background-color: #87ceeb !important;
+            font-size: 16px !important;
+            border-bottom: 3px solid black !important;
+            color: black !important;
+        }
+        select{
+            border: none !important;
+            border-radius: 30px 0px 0px 20px !important;
+            background-color: #87ceeb !important;
+            border-color: black !important;
+            border-bottom: 3px solid black !important;
+        }
+        .round input[type = "file"]{
+			position: absolute;
+			transform: scale(1);
+			opacity: 0;
+			}
+        
+    </style>
+
+    <!-- icon image -->
+        <link rel="stylesheet" type="text/css" href="{% static 'assets/webasset/lib/cartyp/iconselect.css' %}" >
+        <script type="text/javascript" src="{% static 'assets/webasset/lib/cartyp/iconselect.js' %}"></script>
+        <!-- <script type="text/javascript" src="lib/cartyp/iscroll.js"></script> -->
+     
+    </head>
+
+    <body >
+    <!-- <body onload="initMap()"> -->
+        <!-- Nav Bar Start -->
+        <div class="nav-bar">
+            <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+                    <div class="container-fluid">
+                        <a href="#" class="navbar-brand">MENU</a>
+                            <a href="{% url 'home-w'%}">
+                                    <h2 style="color: aliceblue;">Car <span>wash</span></h2>
+                            </a>
+                        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toghle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                            <div class="navbar-nav mr-auto">
+                                <a href="{% url 'home-w'%}" class="nav-item nav-link">Home</a>
+                                <a href="{% url 'washing-w'%}" class="nav-item nav-link active">Service point</a>
+                                <a href="{% url 'about-w'%}" class="nav-item nav-link">About</a>
+                                <a href="{% url 'contact-w'%}" class="nav-item nav-link">Contact</a>
+                        </div>
+                        <a href="logout.php" class="nav-item nav-link" style="float: right;">Logout</a>
+                    </div>
+                </nav>
+        </div>
+        <!-- Nav Bar End -->
+        
+        <!-- map Start -->
+        <div class="contact">
+            <div class="section-header text-center">
+                <h2>Washing Point</h2>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- mapp -->
+                    <div id="map"></div> 
+                    <!-- mapp -->
+                   
+                </div>
+            </div>
+        </div>
+        <!-- map End -->
+    
+        <!-- start request -->
+        <div class="modal " id="myModal">
+            <div  class="modal-dialog modal-dialog-centered" role="document">
+                <div id="myModal1" class="modal-content ">
+                    <div class="modal-header">
+                        <h4 class="h4 fw-bold" style="text-align:center !important; color: green !important;">Add Request</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" style="background-color: green;">X</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="container">
+
+
+                            <form id="form" action="" method="post">
+                                <div class="form-group">
+                                    <input type="text" name="company" class="form-control" id="companyName" style="color: green !important; text-align:center !important;font-size: 24px !important;border-radius: 0px 0px 0px 5px !important;box-shadow:none !important;" readonly>
+                                </div>
+                                 
+                            <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <!-- <input type="text" class="form-control" placeholder="Type of Vehicle" required name="vehicle_type"> -->
+                                            <div id="my-icon-select" name="vehicle_type" ></div>
+                                            <input type="text" id="selected-text" class="form-control" name="vehicle_type" style="color: black !important;" readonly>
+                                                <!-- <input type="text" id="selected-text" name="selected-text" style="width:200px;"> -->
+                                            
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <input type="text" class="form-control" placeholder="Vehicle Model" required name="vehicle_model"> -->
+                                            <select class="form-control input-solid" name="vehicle_model" id="area" required> 
+                                                        <option value="">--Choose car brand--</option>
+                                                        <?php
+                                                        $query4 = "SELECT * FROM carbrand";
+                                                        $query4 = mysqli_query($conn,$query4);
+                                                        while($cb = mysqli_fetch_assoc($query4)){
+                                                        ?>
+                                                            <option ><?php echo $cb['brand'];?></option>
+                                                    <?php
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Plate Number" required name="pnumber" >
+                                            </div>
+                                            <div class="form-group">
+                                                <select name="service" class="form-control" id="area" required >
+                                                    <option value="">---choose services--</option>
+                                                    <option value="standard wash">Standard wash</option>
+                                                    <option value="Premium wash">Premium wash</option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <select name="extra" class="form-control" id="area">>
+                                                <option value="">---choose extra--</option>
+                                                <option value="wax & polish service">wax & polish service</option>
+                                                <option value="premium interior">premium interior</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="Choose date" onfocus="(this.type='datetime-local')" name="date_t" required >
+                                        </div>
+                                        <div class="form-group">
+                                            
+                                            <textarea name="detail" cols="25" rows="5" class="form-control">More </textarea>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-info form-control" name="request">Request</button>
+                                    </div>
+                                    
+                                </div>                           
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div> 
+        <!-- request end -->
+
+        <!-- request Start -->
+        <div class="contact">
+            <div class="section-header text-center">
+                <h2>Request</h2>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <table class="table table-hover table-striped mt-3">
+                        <thead>
+                            <tr style="color: red;" >
+                                <th>No.</th>
+                                <th>Name</th>
+                                <th>Plate number</th>
+                                <th>Service name</th>
+                                <th>Provider phone</th>
+                                <th>Request date</th>
+                                <th>Status.</th>
+                                <th>Cancel request</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                $requet = "SELECT booking.id_booking,booking.vehicle_number,booking.amount,booking.service_booking,booking.date_booking,booking.status,owner.owner_phone FROM booking JOIN owner ON booking.id_company = owner.id_company WHERE booking.customer_id = (SELECT id_customer FROM customer WHERE customer_email = '$name')";
+                                $requet = mysqli_query($conn,$requet) or die("errors");
+                                if(mysqli_num_rows($requet)>0){
+                                    $n = 1;
+                                    while($r = mysqli_fetch_assoc($requet)){
+                                        ?>
+                                            <tr id="<?php echo$r['id_booking'];?>">
+                                                <td id="tfont" scope="row"><?php echo $n++;?></td>
+                                                <td id="tfont"><?php echo $uname?></td>
+                                                <td id="tfont"><?php echo $r['vehicle_number'];?></td>
+                                                <td id="tfont"><?php echo $r['service_booking'];?></td>
+                                                <td id="tfont"><?php echo $r['owner_phone'];?></td>
+                                                <td id="tfont"><?php echo substr($r['date_booking'],0,-6);?></td>
+                                                <td id="tfont">
+                                                <?php 
+                                                    if($r['status']==1){
+                                                        ?>
+                                                        <a>Wait ...</a>
+                                                        <?php
+                                                    }
+                                                    if($r['status']==2){
+                                                        ?>
+                                                        <!-- <a onclick="alert(""); //acpt($r['id_booking']);" >You have to Pay <span style="color: red;"><?php echo $r['amount'];?></span></a> -->
+                                                        <!-- <a href="#" class="acce" >You have to Pay <span style="color: red;"><?php echo $r['amount'];?></span></a> -->
+                                                        <form id = "form2" action="" enctype="multipart/form-data" method="post">
+                                                                <div class="round">
+                                                                <input type="hidden" name="log_name" value="<?php echo $name;?>">
+                                                                <input type="hidden" name="log_email" value="<?php echo $uname;?>">
+                                                                <input type="file" name="image2" id = "image2" accept=".jpg, .jpeg, .png">
+                                                                <i class = "fa fa-camera" style = "color: #fff;"> </i> upload image
+                                                                </div>
+                                                                </form>
+                                                        <script type="text/javascript">
+                                                            document.getElementById("image2").onchange = function(){
+                                                                document.getElementById("form2").submit();
+                                                            };
+                                                        </script>
+                                                        <?php
+                                                    }
+                                                    if($r['status']==3){
+                                                        ?>
+                                                        <a href="#" style="color: green !important;">Done</a>
+                                                        <?php
+                                                    }
+                                                    if($r['status']==4){
+                                                        ?>
+                                                        <a href="#" style="color: green !important;">Successfull</a>
+                                                        <?php
+                                                    }
+                                                    if($r['status']==5){
+                                                        ?>
+                                                        <a href="#" style="color: green !important;">Successfull</a>
+                                                        <?php
+                                                    }
+                                                    if($r['status']==6){
+                                                        ?>
+                                                        <a href="#" style="color: red !important;">Rejected</a>
+                                                        <?php
+                                                    }
+                                                ?>	
+                                                </td>
+                                                <?php $canc = $r['status'];  ?>
+                                                <td id="tfont"><?php                                                
+                                                if($canc <= 2){ 
+                                                    echo '<a href="#" class="canc">Cancel</a>';
+                                                }
+                                                ?></td>
+                                                <!-- <td id="tfont" class="td-actions text-center"><a href="http://"><i class="la la-edit" title="Edit"></i></a> <a href="http://"><i class="la la-times text-danger" title="Remove"></i</a></td> -->
+                                            </tr>
+                                        <?php
+                                    }
+                                }
+                            ?>                            
+                        </tbody>
+                    </table> 
+                </div>
+            </div>
+        </div>
+        <!-- request End -->
+
+
+        <!-- Footer Start -->
+       <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-7">
+                    <div class="footer-contact">
+                        <h2>Get In Touch</h2>
+                        <p><i class="fa fa-map-marker-alt"></i>Miti-mirefu, Mwanza, TANZANIA</p>
+                        <p><i class="fa fa-phone-alt"></i>0752932680</p>
+                        <p><i class="fa fa-envelope"></i>Habibujumanne80@gmail.com</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-7">
+                    <div class="footer-link">
+                        <h2>Popular Links</h2>
+                        <a href="{% url 'about-w'%}">About Us</a>
+                        <a href="{% url 'contact-w'%}">Contact Us</a>
+                        <a href="{% url 'washing-w'%}">Service Points</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container copyright">
+            <p>&copy; <span id="currentdat"></span>,U-wash By <a href="#">Habibu Jumanne</a></p>
+        </div>
+    </div>
+    <!-- Footer End -->
+    <script>
+    var d = new Date();
+    document.getElementById("currentdat").innerHTML = d.getFullYear();
+    </script>
+    <!-- Back to top button -->
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+        <!-- modal reflesh -->
+            <script>
+				// $(document).ready(function(){
+				// 	$(".modal").on("hidden.bs.modal", function(){
+				// 		// location.reload();
+				// 		$("#form").trigger('reset');
+				// 	});
+				// });
+				
+                // // accepttt
+                // $(".acce").click(function(){
+				// 	var id = $(this).parents("tr").attr("id");
+				// 	// if(alertify.confirm('Are you sure you want to delete this record permanet?')){					
+                //         $.ajax({
+                //             url: 'accept_pay.php',
+                //             type: 'GET',
+                //             data: {id : id}                            
+                //         });
+                //         location.reload();
+                //         return false;
+											
+				// });
+                // cansell
+                function reset () {
+					$("#toggleCSS").attr("href", "lib/themes/alertify.default.css");
+					alertify.set({
+						labels : {
+							ok     : "OK",
+							cancel : "Cancel"
+						},
+						delay : 5000,
+						buttonReverse : false,
+						buttonFocus   : "ok"
+					});
+				}
+				$(".canc").click(function(){
+					var id = $(this).parents("tr").attr("id");
+					// if(alertify.confirm('Are you sure you want to delete this record permanet?')){
+						alertify.confirm("Are you sure you want to Cancel this request ?", function (e) {
+							if (e) {
+								$.ajax({
+									url: 'cancel.php',
+									type: 'GET',
+									data: {id : id},
+									error: function() {
+										alertify.alert('something is wrong');
+									},
+									success: function(data){
+										$("#"+id).remove();
+										alertify.alert("Request are cancel successfully");
+									}
+
+								});
+								location.reload();
+								return false;
+								// alertify.alert("Successful AJAX after OK");
+							} else {
+								alertify.alert("Your Cancel!");
+							}
+					});
+				});
+			</script>
+{% endblock body1%}
+

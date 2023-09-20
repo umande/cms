@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% block body %}
+{% include 'header1.html' %}
+{% load static %}
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'user' %}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'customer-u' %}">
+        <i class="bi bi-people"></i><span>Customer</span><i></i>
+      </a>
+    </li><!-- End customer Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'request_user-u' %}">
+        <i class="bi bi-cart4"></i><span>Request</span><i></i>
+      </a>
+    </li><!-- End request Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'employee-u' %}">
+        <i class="bi bi-people"></i><span>Employee</span><i></i>
+      </a>
+    </li><!-- End employee Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#report-nav" data-bs-toggle="collapse" href="#">
+        <i class="bx bx-bar-chart"></i><span>Report</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="{% url 'report-u' 1 %}">
+            <i class="bi bi-circle"></i><span>Today</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'report-u' 2 %}">
+            <i class="bi bi-circle"></i><span>Month</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'report-u' 3 %}">
+            <i class="bi bi-circle"></i><span>year</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End report Nav -->
+
+
+</aside><!-- End Sidebar-->
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Employee</h1>
+      <nav>
+        <ol class="breadcrumb" style="font-size: 16px !important;">
+          <li class="breadcrumb-item"><a href="{% url 'user' %}"><i class="bi bi-house-door" style="color: red !important;"></i></a></li>
+          <li class="breadcrumb-item active">Employee</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section dashboard">
+      <div class="row">
+
+      <!-- Left side columns -->
+      <div class="col-lg-12">
+      <div class="row">
+          <!-- Recent Sales -->
+          <div class="col-12">
+          <div class="card recent-sales">
+
+              <div class="card-body">
+              <h5 class="card-title">List of Employee</h5>
+             <div class="table-responsive">
+                {% comment %} <table class="table datatable"> {% endcomment %}
+                <table class="table table-hover table-border datatable">
+                 
+                  <thead>
+                  <tr>
+                      <th scope="col">No.</th>
+                      <th scope="col">Full name</th>
+                      <th scope="col">User name</th>
+                      <th scope="col">Phone</th>
+                      <th scope="col">Place</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for user in employees %}
+                  {% if user.role != "Admin" %}
+                  <tr id="{{user.id }}">
+                  <th scope="row"><a href="#">#24{{user.id }}</a></th>
+                      <td>{{user.worker_first_name|title}} {{user.worker_last_name|title}}</td>
+                      <td>{{user.worker_last_name}}</td>
+                      <td>{{user.worker_phone | title}}</td>
+                      <td>{{user.worker_address | title}}</td>
+                      <td>
+                        {% if user.id_schedule == 0 %}
+                        <a href="#" onclick = "assignTask('{{user.id}}')" class="btn btn-link text-success">idle</a>
+                        {% else %}
+                        <a href="#" class="btn btn-link text-danger">working</a>
+                        {% endif %}
+                      </td>
+                      <td>
+                      <a  href="{% url 'editEmployee-u' user.id %}" class="badge bg-primary" style="font-size:16px; margin-right: 3px;" onMouseOver="this.style.color='red'" onMouseOut="this.style.color='white'"><i class="bi bi-pen"> </i> </a>
+                      <a href="#" onclick = "delcustomer('{{user.id}}','{{user.worker_first_name}}','{{user.worker_last_name}}')" class="badge bg-danger" style="font-size:16px;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='white'"><i class="bi bi-exclamation-octagon"></i></a>
+                      </td>
+
+                    <!-- delete Modal -->
+                        <div class="modal fade" id="verticalycentered" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                            <div class="modal-header" style="background-color: #dee2e6;">
+                                <h5 class="modal-title" style="color: red;">Warning!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="{% url 'delEmployee-u' %}" method="POST">
+                                <div class="modal-body">
+                                {% csrf_token %}
+                                <h6>Are sure you want to delete '<span id="cName" style="color: maroon;"></span>?'</h6>
+                                <input type="text" name="id_employee" id="idD" style="display: none;">
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                <button type="submit" class="btn btn-danger">Yes</button>
+                                </div>
+                            </form>
+                            </div>
+
+                        </div>
+                        </div><!-- End delete Modal-->
+
+                    <!-- assign task Modal -->
+                        <div class="modal fade" id="assignTask" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                            <div class="modal-header" style="background-color: #dee2e6;">
+                                <h5 class="modal-title text-primary" >Assign Task</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="{% url 'addEmployeeTask-u' %}" method="POST">
+                                <div class="modal-body justify-content-center">
+                                {% csrf_token %}
+                                <input type="text" name="id_employee" id="id_employee" style="display: none;">
+                                <div class="col-md-12">
+                                  <select id="inputState" class="form-select" name="task">
+                                    <option value="0">--Choose Task--</option>
+                                    {% for task in workorder %}
+                                    <option value="{{task.id_order}}">{{ task.customer.id_vehicle.vehicle_brand|title }} | {{task.customer.id_vehicle.vehicle_type |cut:"= Tshs"|slice:"-5"|title }} => {{task.customer.id_vehicle.vehicle_owner_number | upper}}</option>
+                                    {% endfor %}
+                                  </select>
+                                </div>
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                <button type="submit" class="btn btn-danger">Yes</button>
+                                </div>
+                            </form>
+                            </div>
+
+                        </div>
+                        </div><!-- End assign task Modal-->
+                  </tr>
+                  {% endif %}
+                  {% endfor %}
+                  </tbody>
+              </table>
+             </div>
+              <div class="d-flex align-items-end justify-content-end">
+                <a class="btn btn-success" href="{% url 'addEmployee-u' %}">add</a>
+              </div>
+            </div>
+          </div>
+          </div><!-- End Recent Sales -->
+
+      </div>
+      </div><!-- End Left side columns -->
+  </div>
+  </section>
+
+</main><!-- End #main -->
+
+{% endblock body %}
