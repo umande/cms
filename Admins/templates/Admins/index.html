@@ -40,18 +40,18 @@
   google.maps.event.addListener(marker, "click", function() {
       map.setZoom(17);
       map.setCenter(marker.getPosition());
-if (currentPopup != null) {
-currentPopup.close();
-currentPopup = null;
-}
-popup.open(map, marker);
-currentPopup = popup;
-      var name = popup.content;
-      var en = name.search("</h1>")
-      name = name.slice(22, en);
-      var companyName = document.getElementById("companyName").value = name;
-      ico();
-});
+  if (currentPopup != null) {
+  currentPopup.close();
+  currentPopup = null;
+  }
+  popup.open(map, marker);
+  currentPopup = popup;
+        var name = popup.content;
+        var en = name.search("</h1>")
+        name = name.slice(22, en);
+        var companyName = document.getElementById("companyName").value = name;
+        ico();
+  });
 
 
   }
@@ -70,9 +70,7 @@ currentPopup = popup;
           });
 
       {% for item in mapData %}
-      console.log(item.company__company_name)
-      console.log('hellow')
-          //addMarker('{{item.company__map_id__lat}}', '{{item.company__map_id__lng}}','<h1 id="firstHeading">'+ '{{item.company__company_name}}' +'</h1>' + '<h4 id="secondHeading" class="firstHeading">'+'{{item.company__company_description}}'+'</h4>'+'<a class="btn" data-bs-toggle="modal" data-bs-target="#myModal">request</a>'); 
+          addMarker('{{item.lat}}', '{{item.lng}}','<h1 id="firstHeading">'+ '{{item.cmpName}}' +'</h1>' + '<h4 id="secondHeading" class="firstHeading">'+'{{item.Dsc}}'+'</h4>'); 
       {% endfor %}
 
   center = bounds.getCenter();
@@ -117,18 +115,37 @@ currentPopup = popup;
       iconSelect.refresh(icons);
 
   };
-      
-  </script>
-  <style>
+</script>
+
+<style>
     #map {
       height: 445px;
       width: 100%;
       box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
   }
- /* #map:hover{
+ #map:hover{
       border-color: rgba(13, 110, 253, 0.7);
-      box-shadow: 0px 0px 10px 2px rgba(13, 110, 253, 0.6);
-  }*/
+      box-shadow: 0px 0px 0.5px 1px rgba(13, 110, 253, 0.6);
+  }
+    .gm-style .gm-style-iw-d::-webkit-scrollbar-track,
+    .gm-style .gm-style-iw-d::-webkit-scrollbar-track-piece,
+    .gm-style .gm-style-iw-c,
+    .gm-style .gm-style-iw-t::after {
+        background: #455068;
+    }
+    .gm-style .gm-style-iw-c{
+        text-align: center !important;
+        width: 10% !important;
+    }
+    #firstHeading{
+        color: #ff0000 !important;
+        font-size: 22px !important;
+    }        
+    #secondHeading{
+        color: #0dfa41 !important;
+        font-size: 16px !important;
+    }
+
   </style>
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
@@ -323,7 +340,7 @@ currentPopup = popup;
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Reports <span>/Today</span></h5>
+                  <h5 class="card-title">Company <span>/Graph</span></h5>
 
                   <!-- Line Chart -->
                   <div id="reportsChart"></div>

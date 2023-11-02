@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
-from .models import owners,Company,Customer,Vehicle,Workorder,Worker
+from .models import owners,Company,Customer,Vehicle,Workorder,Worker,Booking,Payment
 from .addcarwash import addcarwashs,addcompany
 from .addcustomer import addcustomers,addvehicle
 from .addemployee import addworker
@@ -10,27 +10,32 @@ from collections import Counter
 from django.db.models.functions import ExtractMonth,ExtractYear
 import datetime
 import calendar
-from django.db.models import Q,Count,Sum
+from django.db.models import Q,Count,Sum,F
 
 @login_required(login_url='login')
 def Adminss(request):
     # graph
-    customerg = Customer.objects.all().annotate(month=ExtractMonth('date')).values('month')
+    # customerg = Customer.objects.all().annotate(month=ExtractMonth('date')).values('month')
     ownerg = owners.objects.all().annotate(month=ExtractMonth('date')).values('month')
-    customer_data = Counter()
+    # customer_data = Counter()
     owner_data = Counter()
-    for row in customerg:
-        mm = row['month']
-        mm = calendar.month_name[mm]
-        customer_data[mm] += 1
+    # for row in customerg:
+    #     mm = row['month']
+    #     mm = calendar.month_name[mm]
+    #     customer_data[mm] += 1
     for row in ownerg:
         mm = row['month']
         mm = calendar.month_name[mm]
         owner_data[mm] += 1
-    labels1, values1 = zip(*customer_data.items())
-    labels2, values2 = zip(*owner_data.items())
+    if ownerg:
+        # labels1, values1 = zip(*customer_data.items())
+        labels2, values2 = zip(*owner_data.items())
+    else:
+        # abels1, values1 = ['0','0']
+        labels2, values2 = ['0','0']
+
     # map 
-    mapData = owners.objects.filter(status=2).select_related('company','company__area','company__map_id').values('company__company_name','company__company_description','company__map_id__lat','company__map_id__lng')
+    mapData = owners.objects.filter(status=2).select_related('company','company__area','company__map_id').values(cmpName = F('company__company_name'),Dsc = F('company__company_description'),lat = F('company__map_id__lat'),lng = F('company__map_id__lng'))
     
     number_company = Company.objects.all().count()
     number_customer = Customer.objects.all().count()
@@ -42,14 +47,15 @@ def Adminss(request):
     inc_employee = (incresingEmployee - 1)/100
     inc_customer = (incresingCustomer - 1)/100
     context = {
-        'customerg_data':values1,
-        'customerg_label':labels1,
+        # 'customerg_data':values1,
+        # 'customerg_label':labels1,
         'ownerg_data':values2,
         'ownerg_label':labels2,
         'mapData':mapData,
         'N_customer':number_customer,'N_employee':number_employee,'inc_emply':inc_employee,'inc_custm':inc_customer,
         'N_compy':number_company,'inc_compy':inc_company,
     }
+    
     return render(request, 'Admins/index.html',context)
 @login_required(login_url='login')
 def profile(request):
@@ -208,7 +214,19 @@ def delCustomer(request):
         return redirect('customer')
     
 def user_request(request):
-    return render(request, "Admins/request_user.html")
+    booking = Booking.objects.all().select_related('id_company','customer_id').values('id_booking','service_booking','date_booking','vehicle_type','status','customer_id__customer_first_name','customer_id__customer_second_name','customer_id__customer_phone','id_company__company_name')
+    context = {'bookings':booking}
+    return render(request, "Admins/request_user.html",context)
+
+def pay_request(request):
+    if request.method == "POST":
+        amount = request.POST.get('amount')
+        bookingId = request.POST.get('bookingId')
+        amountId = Payment.objects.create(amount=amount)
+        amountId.save()
+        Booking.objects.filter(id_booking=bookingId).update(amount=amountId.id_payment,status=2)
+        print(amountId.id_payment)
+        return redirect('request_user')
 
 def employee(request):
     employees = Worker.objects.all().order_by('-id').select_related('owner')

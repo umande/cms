@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.hashers import check_password,make_password
 from Admins.models import owners,Company,Customer,Vehicle,Worker,Workorder,Schedule
-from .editcompany import addcarwashs,addcompany
+from .editcompany import addcarwashs,addcompany,companyPhoto
 from Admins.addcustomer import addcustomers,addvehicle
 from Admins.addemployee import addworker
 from django.db.models import Q,Count,Sum
@@ -9,6 +9,7 @@ from django.db.models.functions import ExtractMonth,ExtractYear
 from django.contrib import messages
 import calendar
 import datetime
+import secrets
 
 # report 
 from django.http import FileResponse
@@ -60,8 +61,10 @@ def profile(request):
 
     user = Company.objects.get(id=CmpId)
     owne = owners.objects.get(company_id=CmpId)
+    c_photo = user.company_photo
     form1 = addcompany(instance=user)
     form2 = addcarwashs(instance=owne)
+    company_photo = companyPhoto()
     if request.method == "POST":
         try:
             form1 = addcompany(request.POST,instance=user)
@@ -72,8 +75,8 @@ def profile(request):
                 return redirect('user_Profile-u')
         except: ValueError
 
-    context = {'Fname': Fname,'Sname': Sname,'role': role,'CmpId': CmpId,
-               'form1':form1,'form2':form2,}
+    context = {'Fname': Fname,'Sname': Sname,'role': role,'CmpId': CmpId,'c_photo':c_photo,
+               'form1':form1,'form2':form2,'cmpPhoto':company_photo}
 
     return render(request, "user/profile_edit.html",context)
 
@@ -89,6 +92,27 @@ def profile_passwordChange(request):
     else:
         messages.add_message(request,messages.WARNING,"Wrong password")
     return redirect('user_Profile-u')
+
+def upload_file(f):
+    with open('static/companyPhoto/'+f.name,'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+    fileRename = os.path.splitext(f.name)
+    file_name = fileRename[0]
+    file_extension = fileRename[1]
+    newFile = secrets.randbelow(3_000_000_000_000)
+    os.rename('static/companyPhoto/'+f.name,'static/companyPhoto/'+str(newFile)+file_extension)
+    newfile = str(newFile) + file_extension
+    return newfile
+
+def Company_Photo(request):
+    id_company = request.POST.get('companyPhot')
+    if request.POST:
+        imageP = companyPhoto(request.POST, request.FILES)
+        filenew = upload_file(request.FILES["company_photo"])
+        Company.objects.filter(id=id_company).update(company_photo=filenew)
+    return redirect('user_Profile-u')
+
 
 def customer(request):
     if 'Fname' not in request.session:

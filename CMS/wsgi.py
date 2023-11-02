@@ -15,4 +15,3 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'CMS.settings')
 
 application = get_wsgi_application()
 # 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
-# git remote set-url origin https://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@github.com/umande/cms.git

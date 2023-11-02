@@ -6,7 +6,7 @@
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('{% static "assets/webasset/img/carousel-3.jpg" %}');">
 			<div class="wrap-login100" style="box-shadow: 0 5px 10px rgb(255, 255, 255)  !important;">
-                <form action="" class="login100-form validate-form" method="POST">
+                <form action="" class="login100-form validate-form" onsubmit="return validat_psw()" method="POST">
                     {% csrf_token %}
                     <p class="login100-form-title p-b-8 p-t-15">online carwash request</p>
                     <span class="login100-form-logo">
@@ -16,39 +16,41 @@
                     <div class="row">
                         <div class="col-md-6 col-lg-6">
                             <div class="wrap-input100 validate-input" data-validate="Enter first name">
-                                <input type="text" class="input100" placeholder="First Name"  value="" name="first_name">
+                                {{form.customer_first_name}}
                                 <span class="focus-input100" data-placeholder="&#xf207;"></span>
                             </div>
                             <div class="wrap-input100 validate-input" data-validate="Enter second name">
-                                <input type="text" class="input100" placeholder="Second Name" value="" name="second_name">
+                                {{form.customer_second_name}}
                                 <span class="focus-input100" data-placeholder="&#xf207;"></span>
                             </div>
                             <div class="wrap-input100 validate-input" data-validate="Enter last name">
-                                <input type="text" class="input100" placeholder="Last Name" value="" name="last_name">
+                                {{form.customer_last_name}}
                                 <span class="focus-input100" data-placeholder="&#xf207;"></span>
                             </div>
                             <div class="wrap-input100 validate-input" data-validate="Enter email">
-                                <input type="text" class="input100" placeholder="Email"  value="" name="email">
+                                {{form.customer_email}}
                                 <span class="focus-input100" data-placeholder="&#xf34d;"></span>
+                            </div> 
+                            <div class="wrap-input100 validate-input" data-validate="Enter gender">
+                                {{form.sex}}
+                                <span class="focus-input100" data-placeholder="&#xf207;"></span>
                             </div>                                    
                         </div>
                         <div class="col-md-6 col-lg-6">
                             <div class="wrap-input100 validate-input" data-validate="Enter your address">
-                                <input type="text" class="input100" placeholder="Address" value="" name="address">
+                                {{form.customer_address}}
                                 <span class="focus-input100" data-placeholder="&#xf1ab;"></span>
                             </div>
                             <div class="wrap-input100 validate-input" data-validate="Enter phone number">
-                                <input type="text" class="input100" placeholder="Phone"  value="" name="phone">
+                                {{form.customer_phone}}
                                 <span class="focus-input100" data-placeholder="&#xf20a;"></span>
-                                <!-- <span class="focus-input100" data-placeholder="&#xf2cc;"></span> -->
-                                <!-- <span class="focus-input100" data-placeholder="&#xf28d;"></span> -->
                             </div>
                             <div class="wrap-input100 validate-input" data-validate="Enter password">
-                                <input id="password-field" type="password" class="input100" placeholder="Password" value="" name="password">
-                                <span class="focus-input100" data-placeholder="&#xf191;"></span>                            
+                                {{form.customer_password}}
+                                <span class="focus-input100" data-placeholder="&#xf191;"></span>                        
                             </div>
                             <div class="wrap-input100 validate-input" data-validate="Confirm password">
-                                <input id="password-field" type="password" class="input100" placeholder="Confirm"  value="" name="cpassword">
+                                <input id="confirmPassword" type="password" class="input100" placeholder="Confirm"  value="" name="cpassword">
                                 <span class="focus-input100" data-placeholder="&#xf191;"></span>
                             </div>                                    
                         </div>

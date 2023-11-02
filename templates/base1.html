@@ -30,4 +30,42 @@
     <script src="{% static 'assets/webasset/js/jquery.3.2.1.min.js' %}"></script>
     <script src="{% static 'assets/webasset/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'assets/webasset/js/login.js' %}"></script>
+    <script>
+        function validat_psw(){
+        const newPassword = $('#newPassword').val()
+        const confirmPassword = $('#confirmPassword').val()
+        var Np = $('#newPassword');
+        var Cp = $('#confirmPassword');
+        var phone = $('#newPhn').val();
+        var reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+        var phn = /^[0]{1}[0-9]{9}$/
+        
+        if(newPassword.trim()=='' || confirmPassword.trim()==''){
+            $(".error_m0").text('')
+            $("#error_m1").text('')
+            return false
+        }
+        else{
+            if(phone.match(phn)){
+
+            }else{
+                $('#newPhn').css({"outline":"none","color": "red"})
+                return false;
+            }
+            if(newPassword.match(reg)){ 
+            
+            }else{
+            Np.css({"outline":"none","color": "red"})
+            return false;
+            }
+            if(newPassword != confirmPassword){
+            Np.css({"color": "white"})
+            Cp.css({"outline":"none","color": "red"})
+            
+            return false;
+            }
+        }
+        
+        }
+    </script>
 </html>

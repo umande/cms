@@ -23,7 +23,7 @@
                                 <a href="{% url 'about-w'%}" class="nav-item nav-link">About</a>
                                 <a href="{% url 'contact-w'%}" class="nav-item nav-link">Contact</a>
                             </div>
-                            <a href="logout.php" class="nav-item nav-link" style="float: right;">Logout</a>
+                            <a href="{% url 'logout-w' %}" class="nav-item nav-link" style="float: right;">Logout</a>
                         </div>
                     </div>
                 </nav>
@@ -84,7 +84,7 @@
                     <div class="col-lg-4">
                         <div class="blog-item">
                             <div class="blog-img">
-                                <img src="{% static 'assets/webasset/img/carousel-3.jpg' %}" alt="Image">
+                                <img src="{% static 'companyPhoto/' %}{{compData.company__company_photo}}" alt="Image">
                             </div>
                             <div class="blog-text">
                                 <h3>{{compData.company__company_name| title}} Carwash</h3>

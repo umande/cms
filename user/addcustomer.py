@@ -1,5 +1,5 @@
 from django.forms import ModelForm,TextInput,EmailInput,DateInput,PasswordInput,Select
-from .models  import Customer,Vehicle,Workorder
+from .models  import Customer,Vehicle,Workorder,Company
 
 class addcustomers(ModelForm):
     class Meta:

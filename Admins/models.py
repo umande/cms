@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 from datetime import datetime
+
 class Area(models.Model):
     id = models.AutoField(primary_key=True)
     distric = models.CharField(max_length=200)
@@ -25,7 +26,7 @@ class Company(models.Model):
     id = models.AutoField(primary_key=True)
     company_name = models.CharField(max_length=200)
     company_certificate = models.CharField(max_length=200)
-    company_photo = models.CharField(max_length=200)
+    company_photo = models.ImageField(upload_to='static/upload/')
     company_description = models.TextField(max_length=200)
     area = models.ForeignKey(Area,on_delete=models.DO_NOTHING)
     map_id = models.ForeignKey(Map,on_delete=models.DO_NOTHING,default=1)
@@ -40,7 +41,13 @@ class Payment(models.Model):
     id_payment = models.AutoField(primary_key=True)
     amount = models.IntegerField()
     date_payment = models.DateField(auto_now=True)
-    image = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='static/upload/')
+
+    class Meta:
+        db_table = 'payment'
+    
+    def __str__(self):
+        return self.amount
 
 class Booking(models.Model):
     id_booking = models.AutoField(primary_key=True)
@@ -51,9 +58,9 @@ class Booking(models.Model):
     vehicle_model = models.CharField(max_length=200)
     extra = models.CharField(max_length=200)
     detail = models.CharField(max_length=200)
-    amount = models.IntegerField()
-    id_company = models.IntegerField()
-    customer_id = models.IntegerField()
+    amount = models.IntegerField(default=None)
+    id_company = models.ForeignKey(Company,on_delete=models.DO_NOTHING)
+    customer_id = models.ForeignKey('Customer',on_delete=models.DO_NOTHING)
     status = models.IntegerField(default=1)
 
     class Meta:
@@ -111,7 +118,7 @@ class Customer(models.Model):
     customer_password = models.CharField(max_length=200)
     id_vehicle = models.ForeignKey(Vehicle,on_delete=models.CASCADE)
     id_booking = models.ForeignKey(Booking,on_delete=models.DO_NOTHING)
-    company_id = models.ForeignKey(Company,on_delete=models.DO_NOTHING,default=0)
+    company_id = models.ForeignKey(Company,on_delete=models.DO_NOTHING)
     date = models.DateTimeField(blank=True, default=datetime.now)
 
     class Meta:

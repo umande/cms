@@ -7,6 +7,7 @@ urlpatterns = [
     path('carwash/', views.carwash, name="users"),
     path('customer/', views.customer, name="customer"),
     path('request/', views.user_request, name="request_user"),
+    path('requst_py/', views.pay_request, name="pay_request"),
     path('employee/', views.employee, name="employee"),
     path('employee/edit/<str:pk>', views.editEmployee, name="editEmployee"),
     path('carwash/add/', views.addCarwash, name="addCarwash"),

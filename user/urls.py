@@ -5,6 +5,7 @@ urlpatterns = [
     path("home/",views.user,name="user"),
     path('profile/', views.profile, name="user_Profile-u"),
     path('profile/password/', views.profile_passwordChange, name="user_Profile_passwordChange"),
+    path('profile/image/', views.Company_Photo, name="companyImage"),
     path('customer/', views.customer, name="customer-u"),
     path('request/', views.user_request, name="request_user-u"),
     path('employee/', views.employee, name="employee-u"),

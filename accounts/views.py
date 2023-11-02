@@ -25,6 +25,9 @@ def login_user(request):
             psw = form.cleaned_data.get('password')
             try:
                 user = owners.objects.get(owner_email=uname)
+                if user.status == "1":
+                    messages.error(request,"your account is inactive contact admin inorder to activate habibujumanne80@gmail.com")
+                    return redirect('user')
                 if check_password(psw,user.owner_password):
                     request.session['Fname'] = user.owner_first_name
                     request.session['Sname'] = user.owner_second_name

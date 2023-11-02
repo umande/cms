@@ -36,6 +36,16 @@
     #div_id_password1 ul{
       display: none !important;
     }
+    #Uprofile{
+      overflow: hidden !important;
+      position: relative;
+    }
+    #Uprofile input[type=file]{
+      position: absolute;
+      filter: alpha(opacity=0);
+      opacity: 0;
+      outline: none;
+    }
   </style>
 </head>
 
@@ -94,6 +104,11 @@
     function assignTask(customerId){
         $("#id_employee").val(customerId)
         $("#assignTask").modal("show")
+        
+    }
+    function pendingStatus(customerId){
+        $("#id_employee").val(customerId)
+        $("#penndingStatus").modal("show")
         
     }
     function validat_psw(){

@@ -1,121 +1,119 @@
 {% extends 'base2.html' %}
 {% block body1 %}
 {% load static %}
-    <script>
-        var icon = new google.maps.MarkerImage("http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-        new google.maps.Size(50, 50), new google.maps.Point(0, 0),
-        new google.maps.Point(16, 32));
+<script>
+    var icon = new google.maps.MarkerImage("http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+    new google.maps.Size(50, 50), new google.maps.Point(0, 0),
+    new google.maps.Point(16, 32));
 
-        // console.log(navigator.geolocation);
-        const center = [-3.368277, 36.680892];
-        var map = null;
-        var currentPopup;
-        var bounds = new google.maps.LatLngBounds();
-        // addMarker
-        function addMarker(lat, lng, info) {
-                var pt = new google.maps.LatLng(lat, lng, info);
-                bounds.extend(pt);
-                var marker = new google.maps.Marker({
-                    position: pt,
-                    // label: "A",
-                    icon: icon,
-                    map: map,
-                });
-                var popup = new google.maps.InfoWindow({
-                    content: info,
-                    maxWidth: 300
-                });
-
-        google.maps.event.addListener(popup, "closeclick", function() {
-                map.setZoom(14);
-                map.panTo(center);
-                currentPopup = null;
-        });
-
-
-        //map zoom
-        google.maps.event.addListener(marker, "click", function() {
-            map.setZoom(17);
-            map.setCenter(marker.getPosition());
-			if (currentPopup != null) {
-			currentPopup.close();
-			currentPopup = null;
-			}
-			popup.open(map, marker);
-			currentPopup = popup;
-            var name = popup.content;
-            var en = name.search("</h1>")
-            name = name.slice(22, en);
-            var companyName = document.getElementById("companyName").value = name;
-            ico();
-	});
-
-
-        }
-        window.onload = function(){
-
-            map = new google.maps.Map(document.getElementById("map"), {
-                // center: new google.maps.LatLng(navigator.geolocation.getCurrentPosition(function( position ){var mylatlong = position.coords.latitude + "," + position.coords.longitude;})),
-                center: new google.maps.LatLng(-3.368277, 36.680892),
-                zoom: 13,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                mapTypeControl: false,
-                mapTypeControlOptions: {
-                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
-                },
-        
-                });
-
-            {% for item in mapData %}
-            console.log(item.company__company_name)
-            console.log('hellow')
-                addMarker('{{item.company__map_id__lat}}', '{{item.company__map_id__lng}}','<h1 id="firstHeading">'+ '{{item.company__company_name}}' +'</h1>' + '<h4 id="secondHeading" class="firstHeading">'+'{{item.company__company_description}}'+'</h4>'+'<a class="btn" data-bs-toggle="modal" data-bs-target="#myModal">request</a>'); 
-            {% endfor %}
-
-        center = bounds.getCenter();
-        map.fitBounds(bounds);
-        }
-
-            
-        var iconSelect;
-
-        function ico(){
-            selectedText = document.getElementById('selected-text');
-            console.log(selectedText);
-            document.getElementById('my-icon-select').addEventListener('changed', function(e){
-               selectedText.value = iconSelect.getSelectedValue();
+    // console.log(navigator.geolocation);
+    const center = [-3.368277, 36.680892];
+    var map = null;
+    var currentPopup;
+    var bounds = new google.maps.LatLngBounds();
+    // addMarker
+    function addMarker(lat, lng, info) {
+            var pt = new google.maps.LatLng(lat, lng, info);
+            bounds.extend(pt);
+            var marker = new google.maps.Marker({
+                position: pt,
+                // label: "A",
+                icon: icon,
+                map: map,
+            });
+            var popup = new google.maps.InfoWindow({
+                content: info,
+                maxWidth: 300
             });
 
-            iconSelect = new IconSelect("my-icon-select", 
-                {'selectedIconWidth':76,
-                'selectedIconHeight':43,
-                'selectedBoxPadding':1,
-                'iconsWidth':63,
-                'iconsHeight':58,
-                'boxIconSpace':1,
-                'vectoralIconNumber': 3,
-                'horizontalIconNumber': 3});
+    google.maps.event.addListener(popup, "closeclick", function() {
+            map.setZoom(14);
+            map.panTo(center);
+            currentPopup = null;
+    });
 
-            var icons = [];
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/micro.png' %}", 'iconValue':'micro'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/center.png'  %}", 'iconValue':'center'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/sedan.png'  %}", 'iconValue':'sedan'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/suv.png'  %}", 'iconValue':'suv'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/minbus.png'  %}", 'iconValue':'minbus'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/limousine.png'  %}", 'iconValue':'limousine'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/crossover.png'  %}", 'iconValue':'crossover'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/pickup.png'  %}", 'iconValue':'pickup'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/hatchback.png'  %}", 'iconValue':'hatchback'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/universal.png'  %}", 'iconValue':'universal'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/sportcar.png'  %}", 'iconValue':'sportcar'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/supervan.png'  %}", 'iconValue':'supervan'});
-            icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/minpickup.png'  %}", 'iconValue':'minpickup'});
-            
-            iconSelect.refresh(icons);
 
-        };
-            
-        </script>
+    //map zoom
+    google.maps.event.addListener(marker, "click", function() {
+        map.setZoom(17);
+        map.setCenter(marker.getPosition());
+        if (currentPopup != null) {
+        currentPopup.close();
+        currentPopup = null;
+        }
+        popup.open(map, marker);
+        currentPopup = popup;
+        var name = popup.content;
+        var en = name.search("</h1>")
+        name = name.slice(22, en);
+        var companyName = document.getElementById("companyName").value = name;
+        ico();
+});
+
+
+    }
+    window.onload = function(){
+
+        map = new google.maps.Map(document.getElementById("map"), {
+            // center: new google.maps.LatLng(navigator.geolocation.getCurrentPosition(function( position ){var mylatlong = position.coords.latitude + "," + position.coords.longitude;})),
+            center: new google.maps.LatLng(-3.368277, 36.680892),
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: false,
+            mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
+            },
+    
+            });
+
+        {% for item in mapData %}
+            addMarker('{{item.lat}}', '{{item.lng}}','<h1 id="firstHeading">'+ '{{item.cmpName}}' +'</h1>' + '<h4 id="secondHeading" class="firstHeading">'+'{{item.Dsc}}'+'</h4>'+'<a class="btn" data-bs-toggle="modal" data-bs-target="#myModal">request</a>'); 
+        {% endfor %}
+
+    center = bounds.getCenter();
+    map.fitBounds(bounds);
+    }
+
+        
+    var iconSelect;
+
+    function ico(){
+        selectedText = document.getElementById('selected-text');
+        console.log(selectedText);
+        document.getElementById('my-icon-select').addEventListener('changed', function(e){
+            selectedText.value = iconSelect.getSelectedValue();
+        });
+
+        iconSelect = new IconSelect("my-icon-select", 
+            {'selectedIconWidth':76,
+            'selectedIconHeight':43,
+            'selectedBoxPadding':1,
+            'iconsWidth':63,
+            'iconsHeight':58,
+            'boxIconSpace':1,
+            'vectoralIconNumber': 3,
+            'horizontalIconNumber': 3});
+
+        var icons = [];
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/micro.png' %}", 'iconValue':'micro'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/center.png'  %}", 'iconValue':'center'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/sedan.png'  %}", 'iconValue':'sedan'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/suv.png'  %}", 'iconValue':'suv'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/minbus.png'  %}", 'iconValue':'minbus'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/limousine.png'  %}", 'iconValue':'limousine'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/crossover.png'  %}", 'iconValue':'crossover'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/pickup.png'  %}", 'iconValue':'pickup'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/hatchback.png'  %}", 'iconValue':'hatchback'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/universal.png'  %}", 'iconValue':'universal'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/sportcar.png'  %}", 'iconValue':'sportcar'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/supervan.png'  %}", 'iconValue':'supervan'});
+        icons.push({'iconFilePath':"{% static 'assets/webasset/cartype/minpickup.png'  %}", 'iconValue':'minpickup'});
+        
+        iconSelect.refresh(icons);
+
+    };
+</script>
+
 <style>
         #map {
             height: 500px;
@@ -167,6 +165,7 @@
             padding-left: 25px;
             background-color: #87ceeb;
             border: none;
+            color: black !important;
             border-radius: 0px 0px 0px 20px;
             font-size: 16px;
             margin-bottom: 5px;
@@ -256,7 +255,7 @@
                                 <a href="{% url 'about-w'%}" class="nav-item nav-link">About</a>
                                 <a href="{% url 'contact-w'%}" class="nav-item nav-link">Contact</a>
                         </div>
-                        <a href="logout.php" class="nav-item nav-link" style="float: right;">Logout</a>
+                        <a href="{% url 'logout-w' %}" class="nav-item nav-link" style="float: right;">Logout</a>
                     </div>
                 </nav>
         </div>
@@ -280,7 +279,7 @@
     
         <!-- start request -->
         <div class="modal " id="myModal">
-            <div  class="modal-dialog modal-dialog-centered" role="document">
+            <div  class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div id="myModal1" class="modal-content ">
                     <div class="modal-header">
                         <h4 class="h4 fw-bold" style="text-align:center !important; color: green !important;">Add Request</h4>
@@ -289,9 +288,8 @@
 
                     <div class="modal-body">
                         <div class="container">
-
-
                             <form id="form" action="" method="post">
+                                {% csrf_token %}
                                 <div class="form-group">
                                     <input type="text" name="company" class="form-control" id="companyName" style="color: green !important; text-align:center !important;font-size: 24px !important;border-radius: 0px 0px 0px 5px !important;box-shadow:none !important;" readonly>
                                 </div>
@@ -309,19 +307,14 @@
                                             <!-- <input type="text" class="form-control" placeholder="Vehicle Model" required name="vehicle_model"> -->
                                             <select class="form-control input-solid" name="vehicle_model" id="area" required> 
                                                         <option value="">--Choose car brand--</option>
-                                                        <?php
-                                                        $query4 = "SELECT * FROM carbrand";
-                                                        $query4 = mysqli_query($conn,$query4);
-                                                        while($cb = mysqli_fetch_assoc($query4)){
-                                                        ?>
-                                                            <option ><?php echo $cb['brand'];?></option>
-                                                    <?php
-                                                    }
-                                                ?>
+                                                        {% for brand in carBrand %}
+                                                            <option >{{brand.brand}}</option>
+                                                        {% endfor %}
                                             </select>
                                         </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="Plate Number" required name="pnumber" >
+                                                {{form.vehicle_number}}
+                                                <!-- <input type="text" class="form-control" placeholder="Plate Number" required name="pnumber" > -->
                                             </div>
                                             <div class="form-group">
                                                 <select name="service" class="form-control" id="area" required >
@@ -344,13 +337,13 @@
                                             <input type="text" class="form-control" placeholder="Choose date" onfocus="(this.type='datetime-local')" name="date_t" required >
                                         </div>
                                         <div class="form-group">
-                                            
+                                            <!-- {{form.detail}} -->
                                             <textarea name="detail" cols="25" rows="5" class="form-control">More </textarea>
                                         </div>
                                         
                                     </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-info form-control" name="request">Request</button>
+                                    <div class="form-group bg-light clearfix">
+                                        <button type="submit" class="btn btn-info form-control float-right ml-2" name="request">Request</button>
                                     </div>
                                     
                                 </div>                           
@@ -385,80 +378,54 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
-                                $requet = "SELECT booking.id_booking,booking.vehicle_number,booking.amount,booking.service_booking,booking.date_booking,booking.status,owner.owner_phone FROM booking JOIN owner ON booking.id_company = owner.id_company WHERE booking.customer_id = (SELECT id_customer FROM customer WHERE customer_email = '$name')";
-                                $requet = mysqli_query($conn,$requet) or die("errors");
-                                if(mysqli_num_rows($requet)>0){
-                                    $n = 1;
-                                    while($r = mysqli_fetch_assoc($requet)){
-                                        ?>
-                                            <tr id="<?php echo$r['id_booking'];?>">
-                                                <td id="tfont" scope="row"><?php echo $n++;?></td>
-                                                <td id="tfont"><?php echo $uname?></td>
-                                                <td id="tfont"><?php echo $r['vehicle_number'];?></td>
-                                                <td id="tfont"><?php echo $r['service_booking'];?></td>
-                                                <td id="tfont"><?php echo $r['owner_phone'];?></td>
-                                                <td id="tfont"><?php echo substr($r['date_booking'],0,-6);?></td>
-                                                <td id="tfont">
-                                                <?php 
-                                                    if($r['status']==1){
-                                                        ?>
-                                                        <a>Wait ...</a>
-                                                        <?php
-                                                    }
-                                                    if($r['status']==2){
-                                                        ?>
-                                                        <!-- <a onclick="alert(""); //acpt($r['id_booking']);" >You have to Pay <span style="color: red;"><?php echo $r['amount'];?></span></a> -->
-                                                        <!-- <a href="#" class="acce" >You have to Pay <span style="color: red;"><?php echo $r['amount'];?></span></a> -->
-                                                        <form id = "form2" action="" enctype="multipart/form-data" method="post">
-                                                                <div class="round">
-                                                                <input type="hidden" name="log_name" value="<?php echo $name;?>">
-                                                                <input type="hidden" name="log_email" value="<?php echo $uname;?>">
-                                                                <input type="file" name="image2" id = "image2" accept=".jpg, .jpeg, .png">
-                                                                <i class = "fa fa-camera" style = "color: #fff;"> </i> upload image
-                                                                </div>
-                                                                </form>
-                                                        <script type="text/javascript">
-                                                            document.getElementById("image2").onchange = function(){
-                                                                document.getElementById("form2").submit();
-                                                            };
-                                                        </script>
-                                                        <?php
-                                                    }
-                                                    if($r['status']==3){
-                                                        ?>
-                                                        <a href="#" style="color: green !important;">Done</a>
-                                                        <?php
-                                                    }
-                                                    if($r['status']==4){
-                                                        ?>
-                                                        <a href="#" style="color: green !important;">Successfull</a>
-                                                        <?php
-                                                    }
-                                                    if($r['status']==5){
-                                                        ?>
-                                                        <a href="#" style="color: green !important;">Successfull</a>
-                                                        <?php
-                                                    }
-                                                    if($r['status']==6){
-                                                        ?>
-                                                        <a href="#" style="color: red !important;">Rejected</a>
-                                                        <?php
-                                                    }
-                                                ?>	
-                                                </td>
-                                                <?php $canc = $r['status'];  ?>
-                                                <td id="tfont"><?php                                                
-                                                if($canc <= 2){ 
-                                                    echo '<a href="#" class="canc">Cancel</a>';
-                                                }
-                                                ?></td>
-                                                <!-- <td id="tfont" class="td-actions text-center"><a href="http://"><i class="la la-edit" title="Edit"></i></a> <a href="http://"><i class="la la-times text-danger" title="Remove"></i</a></td> -->
-                                            </tr>
-                                        <?php
-                                    }
-                                }
-                            ?>                            
+                          {% for data in myOrder %}
+                            <tr id="{{data.id_booking}}">
+                                <td id="tfont" scope="row">12{{data.id_booking}}</td>
+                                <td id="tfont">{{namePhone.customer_first_name}}</td>
+                                <td id="tfont">{{data.vehicle_number|upper}}</td>
+                                <td id="tfont">{{data.service_booking}}</td>
+                                <td id="tfont">{{namePhone.customer_phone}}</td>
+                                <td id="tfont">{{data.date_booking|slice:":10" }} / {{data.date_booking|slice:"11:16" }}</td>
+                                <td id="tfont">
+                                    {% if data.status == 1 %}
+                                    <a>Wait ...</a>
+                                    {% endif %}
+                                    {% if data.status == 2 %}
+                                    <form id = "form2" action="{% url 'toPay' %}" enctype="multipart/form-data" method="post">
+                                        {% csrf_token %}
+                                        <div class="round">
+                                        <input type="hidden" name="paymentId" value="{{data.amount}}">
+                                        <!-- <input type="file" name="pay_image" id = "image2" accept=".jpg, .jpeg, .png"> -->
+                                        {{imageP.image}}
+                                        <i class = "fa fa-camera" style = "color: #fff;"> </i> upload image 
+                                        </div>
+                                        </form>
+                                    <script type="text/javascript">
+                                        document.getElementById("image2").onchange = function(){
+                                            document.getElementById("form2").submit();
+                                        };
+                                    </script>
+                                    {% endif %}
+                                    {% if data.status == 3%}
+                                    <a href="#" style="color: green !important;">Done</a>
+                                    {% endif %}
+                                    {% if data.status == 4 %}
+                                    <a href="#" style="color: green !important;">Successfull</a>
+                                    {% endif %}
+                                    {% if data.status == 5 %}
+                                    <a href="#" style="color: green !important;">Successfull</a>
+                                    {% endif %}
+                                    {% if data.status == 6 %}
+                                    <a href="#" style="color: red !important;">Rejected</a>
+                                    {% endif %}
+                                </td>
+                                <td id="tfont">
+                                    {% if data.status <= 2 %}
+                                    <a href="#" class="canc">Cancel</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                          {% endfor %}
                         </tbody>
                     </table> 
                 </div>

@@ -68,6 +68,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -87,8 +88,8 @@ DATABASES = {
         'NAME':'uwash',
         'USER':'root',
         'PASSWORD':'',
-        'HOST':'localhost',
-        # 'PORT':'cms',
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES', innodb_strict_mode=1"
         }
@@ -136,6 +137,10 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
+# STATICFILES_STORAGE = 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CRISPY_ALLOWED_TEMPLATE_PACK = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'

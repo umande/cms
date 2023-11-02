@@ -1,4 +1,4 @@
-from django.forms import ModelForm,TextInput,EmailInput,Textarea,PasswordInput,Select
+from django.forms import ModelForm,TextInput,EmailInput,Textarea,PasswordInput,Select,HiddenInput
 from Admins.models  import owners,Company
 
 class addcarwashs(ModelForm):
@@ -69,4 +69,18 @@ class addcompany(ModelForm):
             'area': Select(attrs={
             'class':'form-select'
             }),
+        }
+
+class companyPhoto(ModelForm):
+    class Meta:
+        model = Company
+        fields = ['company_photo']
+        widgets = {
+            'company_photo': HiddenInput(attrs={
+            'id': "Cimage1",
+            'name':'Cimage2',
+            'accept': '.jpg, .jpeg, .png',
+            # 'type': 'hidden',
+            'onclick':"(this.type='file')"
+            })
         }
