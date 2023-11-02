@@ -1,1 +1,3 @@
 # cms
+uwash is an app that deals with car washing issues and coordinates all car washing procedures, it also coordinates the free delivery service of pickup service.
+The system has 3 roles, one for the supper admin, the other for the owner of the carwash and for the customer for pickup requests. It gives a report to the owner of the carwash and if he joins the online service, it can be seen through the map graph of sales. through the dashboard
