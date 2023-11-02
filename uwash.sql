@@ -67,7 +67,7 @@ CREATE TABLE `auth_user` (
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$600000$iKVS7XNZwz8Tx8C4urWjcR$iDVkklU9fSmYF/uRuD4BVXAcnDwdDWCXwV3zPtpizZo=', '2023-10-29 10:22:17.147539', 1, 'grand', 'habibu', 'jumanne', 'habibujumanne80@gmail.com', 1, 1, '2023-07-09 11:34:00.542881');
+(1, 'pbkdf2_sha256$600000$FvEClEvwkS6SNLN2m2LCQK$I0aCxkGeIKpK/TU3KIq9ehyRxz0vP8dZDZBrKIfzRJE=', '2023-10-29 10:22:17.147539', 1, 'grand', 'habibu', 'jumanne', 'habibujumanne80@gmail.com', 1, 1, '2023-07-09 11:34:00.542881');
 
 -- --------------------------------------------------------
 
